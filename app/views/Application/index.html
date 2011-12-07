@@ -1,0 +1,8 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+<a href="@{Application.create()}">New Site</a>
+<ul>
+#{list items:sites, as:'site'}
+    <li>${site.host} <a href="@{Application.refresh( site.id )}">refresh</a><a href="@{Application.remove(site.host)}">remove</a></li>
+#{/list}
+</ul>

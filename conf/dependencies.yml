@@ -1,0 +1,15 @@
+# Application dependencies
+
+require:
+    - play
+    - play-cloudfoundry -> play-cloudfoundry 0.4
+    - play -> siena 2.0.6
+    - play -> redis 0.3
+
+
+repositories:
+    - My modules:
+        type:       local
+        artifact:   ${application.path}/../[module]
+        contains:
+            - play-cloudfoundry

@@ -1,0 +1,9 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+#{form @Application.save() }
+    <input type="text" name="site.host"/><br/>
+    <input type="text" name="site.username"><br/>
+    <input type="text" name="site.repository"><br/>    
+    <input type="submit">
+#{/form}    

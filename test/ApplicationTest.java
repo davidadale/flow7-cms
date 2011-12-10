@@ -6,7 +6,6 @@ import models.*;
 import play.vfs.VirtualFile;
 import play.Play;
 
-import static org.mockito.Mockito.*;
 import org.junit.Before;
 
 import cms.*;

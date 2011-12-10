@@ -31,6 +31,8 @@ public class Application extends Controller {
     }
     
     public static void remove( String host  ){
+        Site site = Site.findBySiteHost( host );
+        site.finishRefresh();
         Resource.deleteAllByHost( host );
         index();
     }

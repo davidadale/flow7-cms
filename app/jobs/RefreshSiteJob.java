@@ -9,6 +9,7 @@ import java.util.List;
 import models.Site;
 import models.Resource;
 
+
 public class RefreshSiteJob extends Job{
     
     Long id = null;
@@ -43,12 +44,13 @@ public class RefreshSiteJob extends Job{
 		recorder.startRecording();
 		
 		for(Resource r: remote){
-          if( files.contains( r ) ){
+            if( files.contains( r ) ){
                 Resource file = files.get( files.indexOf( r ) );
                 if( file.isOld( r ) ){
                     recorder.recordUpdate( file, r );
                     file.refresh( r );
                     file.save();
+                    ResourceCache.remove( file );
                 }
             }else{
                 recorder.recordNew( r );

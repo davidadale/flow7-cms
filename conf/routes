@@ -3,7 +3,12 @@
 # ~~~~
 
 # Home page
-GET     /                                       Application.index
+GET     /_cms                                   Application.index
+GET     /_cms/site/create                       Application.create
+POST    /_cms/site/save                         Application.save
+GET     /_cms/site/refresh                      Application.refresh
+GET     /_cms/site/clear                        Application.remove
+GET     /_cms/site/preview                      Application.preview
 GET     /process/refresh/{id}                   BackgroundJobs.refreshSite
 
 # Ignore favicon requests
@@ -13,4 +18,5 @@ GET     /favicon.ico                            404
 GET     /public/                                staticDir:public
 
 # Catch all
-*       /{controller}/{action}                  {controller}.{action}
+GET       /{<.*>stuff}                          Resources.serve
+# *       /{controller}/{action}                  {controller}.{action}

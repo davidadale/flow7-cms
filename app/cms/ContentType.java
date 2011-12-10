@@ -26,12 +26,16 @@ public class ContentType{
 	
 	String path;
 	
-	public static boolean isImage( Resource resource ){
-	    String type = resource.type;
+    public static boolean isBinary( String type ){
 		return type.equals("image/gif") ||
 		type.equals("image/jpeg") ||
 		type.equals("image/png") ||
 		type.equals("image/x-icon");
+        
+    }
+
+	public static boolean isImage( Resource resource ){
+	    return isBinary( resource.type );
 	}
 	
 	public static boolean isStatic( Resource resource ){

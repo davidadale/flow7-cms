@@ -28,6 +28,9 @@ public class Resource extends Model implements Serializable{
     
     public Date lastUpdate;
 
+    //@Transient
+    public boolean stale = false;
+
     public Resource(){}
     
     public Resource(String host, String path){
@@ -47,6 +50,10 @@ public class Resource extends Model implements Serializable{
     public Key getKey(){
     	return new Key( host, path );
     }    
+    
+    public boolean isBinary(){
+        return ContentType.isBinary( type );
+    }
     
     public boolean isOld( Resource resource ){
         if( this.lastUpdate==null || resource.lastUpdate == null ){ return false; }
@@ -102,6 +109,11 @@ public class Resource extends Model implements Serializable{
     
     public static void deleteAllByHost( String host ){
         all().filter("host",host).delete();
+    }
+    
+    public static Resource findByKey( Key key ){
+        Resource r = findByHostAndPath( key.host, key.path );
+        return r;
     }
 
     

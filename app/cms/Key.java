@@ -4,10 +4,15 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
+import play.mvc.Http;
+import play.mvc.Scope;
+
+
 public class Key implements Serializable{
     
-    String host = null;
-    String path = null;
+    public String host = null;
+    public String path = null;
+    public String etag = "";
     
     public Key(String host, String path){
         
@@ -17,11 +22,11 @@ public class Key implements Serializable{
         
         //this.host = host.replace("/","");
         this.host = host;
-        this.path = isEmpty(path) ?"/":path;
+        this.path = getPath( path );
     }
     
     public String toString(){
-        return getPrefixedHost() + getPath();
+        return getPrefixedHost() + path;
     }
     
     protected String getPrefixedHost(){
@@ -34,8 +39,8 @@ public class Key implements Serializable{
         return "http://" + host;
     }
     
-    protected String getPath(){
-        if( isRootPath( path ) ){
+    protected String getPath( String path ){
+        if( isEmpty( path ) || isRootPath( path ) ){
             return "/index.html";
         }
         if( path!=null && !path.startsWith("/") ){
@@ -71,5 +76,28 @@ public class Key implements Serializable{
                 .append(path)
                 .toHashCode();
     }
+    
+    public static Key get(){
+        String site = Scope.Session.current().get("_host");
+        String url = Http.Request.current().url;
+        Key key = null;
+        
+        if( site!=null ){
+            key = new Key( site, url);
+        }else{
+            key = new Key( Http.Request.current().domain, url );
+        }
+
+        Http.Header etag = (Http.Header) 
+            Http.Request.current().headers.get("if-none-match");        
+
+        if( etag!=null ){
+            key.etag = etag.value();
+        }
+        
+        return key;
+    }    
+    
+    
     
 }

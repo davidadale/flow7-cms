@@ -35,6 +35,16 @@ public class Application extends Controller {
         index();
     }
     
+    public static void preview(Long id ){
+        
+        Site site = Site.findById( id );
+        if( site != null ){
+            session.put( "_host" , site.host );			            
+        }
+        redirect("/");
+        
+    }
+    
     
 
 }

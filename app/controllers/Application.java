@@ -8,6 +8,8 @@ import java.util.*;
 import models.*;
 import jobs.*;
 
+import cms.Key;
+
 public class Application extends Controller {
 
     public static void index() {
@@ -40,11 +42,23 @@ public class Application extends Controller {
     public static void preview(Long id ){
         
         Site site = Site.findById( id );
+        
         if( site != null ){
             session.put( "_host" , site.host );			            
         }
-        redirect("/");
         
+        redirect("/");
+        /*try{
+            Key key = Key.get();
+            key.path = null;
+            
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& > " + key.toString() );
+            
+            Resources.serve( key );
+        }catch(Exception e){
+            e.printStackTrace();
+            notFound();
+        }*/
     }
     
     

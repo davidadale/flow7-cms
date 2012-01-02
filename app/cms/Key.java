@@ -26,7 +26,7 @@ public class Key implements Serializable{
     }
     
     public String toString(){
-        return getPrefixedHost() + path;
+        return getPrefixedHost() + getPath( path );
     }
     
     protected String getPrefixedHost(){
@@ -40,7 +40,7 @@ public class Key implements Serializable{
     }
     
     protected String getPath( String path ){
-        if( isEmpty( path ) || isRootPath( path ) ){
+        if( isEmpty( path ) || isRootPath( path ) || "/_cms/redirect".equals( path ) ){
             return "/index.html";
         }
         if( path!=null && !path.startsWith("/") ){
@@ -96,7 +96,7 @@ public class Key implements Serializable{
         }
         
         return key;
-    }    
+    }   
     
     
     

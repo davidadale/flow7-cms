@@ -10,6 +10,8 @@ GET     /_cms/site/refresh                      Application.refresh
 GET     /_cms/site/clear                        Application.remove
 GET     /_cms/site/preview                      Application.preview
 GET     /process/refresh/{id}                   BackgroundJobs.refreshSite
+GET     /_cms/obj                               Data.get
+POST    /_cms/obj                               Data.put
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

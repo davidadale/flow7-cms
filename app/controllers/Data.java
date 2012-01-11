@@ -20,8 +20,8 @@ public class Data extends Controller{
         //Gson gson = new Gson();
         //String json = gson.toJson( body );
         
-        Mongo m = new Mongo( "ds029257.mongolab.com" , 29257 );
-        DB db = m.getDB( "heroku_app1959818" );
+        Mongo m = new Mongo( "ds029277.mongolab.com" , 29277 );
+        DB db = m.getDB( "heroku_app2423536" );
         db.authenticate("david@flow7.net", "pauline".toCharArray() );
         DBCollection members = db.getCollection("imagine1_members");
         BasicDBObject doc = new BasicDBObject();
@@ -36,8 +36,9 @@ public class Data extends Controller{
     //JSON.serialize( items )
     public static void get() throws Exception{
         
-        Mongo m = new Mongo( "ds029257.mongolab.com" , 29257 );
-        DB db = m.getDB( "heroku_app1959818" );
+        Mongo m = new Mongo( "ds029277.mongolab.com" , 29277 );
+        //heroku_app2423536
+        DB db = m.getDB( "heroku_app2423536" );
         db.authenticate("david@flow7.net","pauline".toCharArray());        
         DBCollection members = db.getCollection("imagine1_members");
         List items = members.find().toArray();

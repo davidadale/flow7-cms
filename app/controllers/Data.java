@@ -20,9 +20,10 @@ public class Data extends Controller{
         //Gson gson = new Gson();
         //String json = gson.toJson( body );
         
+        //heroku_app2423536:g1gf1usm7it68qehbju2753f55
         Mongo m = new Mongo( "ds029277.mongolab.com" , 29277 );
         DB db = m.getDB( "heroku_app2423536" );
-        db.authenticate("david@flow7.net", "pauline".toCharArray() );
+        db.authenticate("heroku_app2423536", "g1gf1usm7it68qehbju2753f55".toCharArray() );
         DBCollection members = db.getCollection("imagine1_members");
         BasicDBObject doc = new BasicDBObject();
         
@@ -39,7 +40,7 @@ public class Data extends Controller{
         Mongo m = new Mongo( "ds029277.mongolab.com" , 29277 );
         //heroku_app2423536
         DB db = m.getDB( "heroku_app2423536" );
-        db.authenticate("david@flow7.net","pauline".toCharArray());        
+        db.authenticate("heroku_app2423536", "g1gf1usm7it68qehbju2753f55".toCharArray() );
         DBCollection members = db.getCollection("imagine1_members");
         List items = members.find().toArray();
         renderTemplate("Data/form.html", items );

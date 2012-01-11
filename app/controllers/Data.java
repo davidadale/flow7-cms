@@ -22,7 +22,7 @@ public class Data extends Controller{
         
         Mongo m = new Mongo( "ds029257.mongolab.com" , 29257 );
         DB db = m.getDB( "heroku_app1959818" );
-        db.authenticate("davidadale@gmail.com", "p125auline".toCharArray() );
+        db.authenticate("david@flow7.net", "pauline".toCharArray() );
         DBCollection members = db.getCollection("imagine1_members");
         BasicDBObject doc = new BasicDBObject();
         
@@ -38,7 +38,7 @@ public class Data extends Controller{
         
         Mongo m = new Mongo( "ds029257.mongolab.com" , 29257 );
         DB db = m.getDB( "heroku_app1959818" );
-        db.authenticate("davidadale@gmail.com","p125auline".toCharArray());        
+        db.authenticate("david@flow7.net","pauline".toCharArray());        
         DBCollection members = db.getCollection("imagine1_members");
         List items = members.find().toArray();
         renderTemplate("Data/form.html", items );

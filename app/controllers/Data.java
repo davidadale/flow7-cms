@@ -9,43 +9,72 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.*;
-import java.util.List;
+import java.util.*;
+
+import cms.*;
+
 
 public class Data extends Controller{
     
-    public static void put(String name,String country, String email, String letter) throws Exception{
-        //Set<Map.Entry<String,JsonElement>> properties = body.entrySet();
-        //for(Map.Entry prop: properties ){
-        //}
-        //Gson gson = new Gson();
-        //String json = gson.toJson( body );
+    public static void put(String collection) {
         
-        //heroku_app2423536:g1gf1usm7it68qehbju2753f55
-        Mongo m = new Mongo( "ds029277.mongolab.com" , 29277 );
-        DB db = m.getDB( "heroku_app2423536" );
-        db.authenticate("heroku_app2423536", "g1gf1usm7it68qehbju2753f55".toCharArray() );
-        DBCollection members = db.getCollection("imagine1_members");
-        BasicDBObject doc = new BasicDBObject();
+        Map object = params.all();
         
-        doc.put("name", name);
-        doc.put("country", country);
-        doc.put("email", email);
-        doc.put("letter", letter);
+        System.out.println("Printing out the params list " + object );
+        System.out.println("Collection that was parsed is " + collection);
         
-        members.save( doc ); 
-    }
-    //JSON.serialize( items )
-    public static void get() throws Exception{
+        object.remove("body");
         
-        Mongo m = new Mongo( "ds029277.mongolab.com" , 29277 );
-        //heroku_app2423536
-        DB db = m.getDB( "heroku_app2423536" );
-        db.authenticate("heroku_app2423536", "g1gf1usm7it68qehbju2753f55".toCharArray() );
-        DBCollection members = db.getCollection("imagine1_members");
-        List items = members.find().toArray();
-        renderTemplate("Data/form.html", items );
-        
+        MongoDb db = new MongoDb();
+        db.save( collection, object );        
     }
 
+    public static void get(String collection) {
+        renderTemplate("Data/form.html");//, items );
+    }
+
+    public static void query( String collection, String query ){
+        MongoDb db = new MongoDb();
+        
+        System.out.println("Collection is " + collection + " and query is " + query);
+        
+        List<String> items = db.query( collection, query );
+        renderText( items );
+    }
     
 }
+
+/**
+//Set<Map.Entry<String,JsonElement>> properties = body.entrySet();
+//for(Map.Entry prop: properties ){
+//}
+//Gson gson = new Gson();
+//String json = gson.toJson( body );
+
+//heroku_app2423536:g1gf1usm7it68qehbju2753f55
+//Mongo m = new Mongo( "ds029277.mongolab.com" , 29277 );
+//DB db = m.getDB( "heroku_app2423536" );
+//db.authenticate("heroku_app2423536", "g1gf1usm7it68qehbju2753f55".toCharArray() );
+//DBCollection members = db.getCollection("imagine1_members");
+
+//doc.put("name", name);
+//doc.put("country", country);
+//doc.put("email", email);
+//doc.put("letter", letter);
+
+System.out.println("Collection " + collection + " is getting " + doc);
+get( collection );
+//members.save( doc ); 
+
+
+//Mongo m = new Mongo( "ds029277.mongolab.com" , 29277 );
+//heroku_app2423536
+//DB db = m.getDB( "heroku_app2423536" );
+//db.authenticate("heroku_app2423536", "g1gf1usm7it68qehbju2753f55".toCharArray() );
+//DBCollection members = db.getCollection("imagine1_members");
+//List items = members.find().toArray();
+
+
+
+
+**/

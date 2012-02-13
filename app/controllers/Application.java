@@ -32,11 +32,18 @@ public class Application extends Controller {
         index();
     }
     
-    public static void remove( String host  ){
+    public static void removeResources( String host  ){
         Site site = Site.findBySiteHost( host );
         site.finishRefresh();
         Resource.deleteAllByHost( host );
         index();
+    }
+    
+    public static void removeSite( Long id ){
+        Site site = Site.findById( id );
+        site.delete();
+        index();
+        
     }
     
     public static void preview(Long id ){

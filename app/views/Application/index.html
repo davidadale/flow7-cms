@@ -3,7 +3,11 @@
 <a href="@{Application.create()}">New Site</a>
 <ul>
 #{list items:sites, as:'site'}
-    <li>${site.host} <a href="@{Application.refresh( site.id )}">refresh</a><a href="@{Application.remove(site.host)}">remove</a>
-        <a target="_blank" href="@{Application.preview( site.id ) }">preview</a></li>
+    <li><span>${site.host}</span>
+    <a href="@{Application.refresh( site.id )}">refresh</a>
+    <a href="@{Application.removeResources(site.host)}">drop</a>
+    <a href="@{Application.removeSite(site.id)}" onclick="javascript:return confirm("are you sure?");">remove</a>
+    <a target="_blank" href="@{Application.preview( site.id ) }">preview</a>
+    </li>
 #{/list}
 </ul>

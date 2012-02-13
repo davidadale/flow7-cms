@@ -113,6 +113,20 @@ public class Resource extends Model implements Serializable{
     
     public static Resource findByKey( Key key ){
         Resource r = findByHostAndPath( key.host, key.path );
+        // handle necked domains
+        if( r==null &&  
+            key.host!=null && 
+            !key.host.startsWith("www.") ){
+            r = findByHostAndPath( "www." + key.host, key.path );
+        }
+        
+        if( r==null &&
+            key.host!=null &&
+            key.host.startsWith("www.") ){
+                
+            r = findByHostAndPath( key.host.substring(4), key.path );    
+        }
+        
         return r;
     }
 

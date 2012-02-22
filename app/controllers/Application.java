@@ -12,37 +12,48 @@ import cms.Key;
 
 public class Application extends Controller {
 
-    public static void index() {
+    public static void sites() {
         List<Site> sites = Site.all().fetch();
         render( sites );
     }
     
-    public static void create(){
+    public static void addSite(){
         Site site = new Site();
-        render( site );
+        renderTemplate("Application/editSite.html", site );
     }
     
-    public static void save(Site site){
+    public static void editSite(Long id){
+        Site site = Site.findById( id );
+        render( site );        
+    }
+    
+    public static void viewSite(Long id){
+        Site site = Site.findById( id );
+        List<Resource> resources = Resource.findAllByHost( site.host );
+        render(site, resources);
+    }
+    
+    public static void saveSite(Site site){
         site.save();
-        index();
+        sites();
     }
     
     public static void refresh( Long id ){
         new RefreshSiteJob( id ).now();
-        index();
+        sites();
     }
     
     public static void removeResources( String host  ){
         Site site = Site.findBySiteHost( host );
         site.finishRefresh();
         Resource.deleteAllByHost( host );
-        index();
+        sites();
     }
     
     public static void removeSite( Long id ){
         Site site = Site.findById( id );
         site.delete();
-        index();
+        sites();
         
     }
     

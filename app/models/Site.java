@@ -1,6 +1,7 @@
 package models;
 
 import siena.*;
+import java.util.Date;
 
 public class Site extends Model{
 
@@ -10,10 +11,15 @@ public class Site extends Model{
     public String username;
     public String repository;
     public String status = "active";
+    public Date lastRefresh;
     
+    public String registryProvider;
+    public String providerUsername;
+    public String providerPassword;
     
     public void startRefresh(){
         status = "refreshing";
+        lastRefresh = new Date();
         this.save();
     }
     

@@ -1,16 +1,8 @@
 # Application dependencies
-
+#    - play-cloudfoundry -> play-cloudfoundry 0.4
+#    - com.google.collections -> google-collections 1.0
 require:
     - play
-    - play-cloudfoundry -> play-cloudfoundry 0.4
+    - secure
     - play -> siena 2.0.6
-    - play -> redis 0.3
     - org.mongodb -> mongo-java-driver 2.7.2
-    - com.google.collections -> google-collections 1.0
-
-repositories:
-    - My modules:
-        type:       local
-        artifact:   ${application.path}/../[module]
-        contains:
-            - play-cloudfoundry

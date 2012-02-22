@@ -1,0 +1,11 @@
+body{
+    padding-top:60px;
+}
+
+dl.refreshSite{
+    margin:0;
+}
+dl.refreshSite dd{
+    padding-top:7px;
+    margin:0;
+}

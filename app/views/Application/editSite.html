@@ -1,0 +1,71 @@
+#{extends 'main.html' /}
+#{set title:'Add a new website' /}
+
+<div class="container">
+    <div class="row">
+        <div class="span9">
+            #{form @Application.saveSite(),class:'form-horizontal' }
+            <input type="hidden" name="site.id" value="${site.id}"/>
+            <fieldset>
+                <legend>Create a new site</legend>
+            <div class="control-group">
+                <label>Website Host</label>
+                <div class="controls">
+                    <input type="text" name="site.host" value="${site.host}"/>
+                    <p class="help-block">This will be used when domains get mapped to resources. Sub-domain will be used if given.</p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Github username</label>
+                <div class="controls">            
+                    <input type="text" name="site.username" value="${site.username}">
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Github repository</label>
+                <div class="controls">
+                    <input type="text" name="site.repository" value="${site.repository}">
+                </div>
+            </div>
+            <hr/>
+            <div class="control-group">
+                <label>Registry Provider</label>
+                <div class="controls">
+                    <select name="site.registryProvider">
+                        <option #{ifselected site.registryProvider,value:"Hover"/}>Hover</option>
+                        <option #{ifselected site.registryProvider,value:"Go_Daddy"/}>Go Daddy</option>
+                        <option #{ifselected site.registryProvider,value:"Register"/}>Register</p>
+                    </select>    
+                </div>
+            </div>            
+            <div class="control-group">
+                <label>Provider Username: </label>
+                <div class="controls">
+                    <input type="text" name="site.providerUsername" value="${site.providerUsername}">
+                </div>
+            </div>            
+            <div class="control-group">
+                <label>Provider Password: </label>
+                <div class="controls">
+                    <input type="text" name="site.providerPassword" value="${site.providerPassword}">
+                </div>
+            </div>            
+            <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <a href="/_cms" class="btn">Cancel</a>
+                      </div>            
+            </fieldset>
+            #{/form}
+        </div>
+    </div>
+</div>
+
+
+
+<!--div class="control-group">
+            <label class="control-label" for="input01">Text input</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="input01">
+              <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p>
+            </div>
+          </div-->

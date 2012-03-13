@@ -1,0 +1,31 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+<div class="container">
+    <div class="row">
+        <div class="span7">
+            <h2>Managed Sites</h2>            
+        </div>
+        <div class="span2">
+            <a href="/_cms/site/create" class="btn"><i class="icon-plus"></i> Add Site</a>
+        </div>
+    </div>
+#{cms.tags.msg key:'test'/}
+    <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Site Host</th>
+            <th>Last Refresh</th>
+          </tr>
+        </thead>
+        <tbody>
+            #{list items:sites, as:'site'}
+          <tr>
+            <td><a href="/_cms/site/${site.id}">${site.host}</a></td>
+            <td>${site.lastRefresh?.format('MMMM dd, yyyy')}</td>
+          </tr>
+          #{/list}
+        </tbody>
+      </table>    
+</div>
+

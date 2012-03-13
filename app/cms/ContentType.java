@@ -21,6 +21,7 @@ public class ContentType{
 		mimes.put( "jpe",  "image/jpeg");				
 		mimes.put( "png",  "image/png");
 		mimes.put( "ico",  "image/x-icon");
+		mimes.put( "pdf", "application/pdf" );
 		//mimes.put("", "");												
 	}
 	
@@ -32,7 +33,8 @@ public class ContentType{
 		return type.equals("image/gif") ||
 		type.equals("image/jpeg") ||
 		type.equals("image/png") ||
-		type.equals("image/x-icon");
+		type.equals("image/x-icon") ||
+		type.equals("application/pdf");
         
     }
 

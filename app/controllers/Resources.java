@@ -41,7 +41,9 @@ public class Resources extends Controller{
             
             if( resource!=null ){ 
                 
-                ResourceCache.add( resource );
+                if( resource.isBinary() ){
+                    ResourceCache.add( resource );
+                }
                 
                 response.contentType = resource.type;
                 
@@ -53,7 +55,7 @@ public class Resources extends Controller{
                     response.cacheFor( resource.etag  , "1d" , resource.lastUpdate.getTime() );	
                     renderBinary( new ByteArrayInputStream( resource.data ) );
                 }else if( resource.isHtml() ){
-                    response.cacheFor( resource.etag  , "1d" , resource.lastUpdate.getTime() );	
+                    //response.cacheFor( resource.etag  , "1d" , resource.lastUpdate.getTime() );	
                     BaseTemplate bt = TemplateLoader.load(resource.path, new String( resource.data,"utf-8" ) );
                     response.print( bt.render() );
                     response.out.flush();

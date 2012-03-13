@@ -55,6 +55,10 @@ public class Resource extends Model implements Serializable{
         return ContentType.isBinary( type );
     }
     
+    public boolean isHtml(){
+        return "text/html".equals( type );
+    }
+    
     public boolean isOld( Resource resource ){
         if( this.lastUpdate==null || resource.lastUpdate == null ){ return false; }
         return lastUpdate.before( resource.lastUpdate );

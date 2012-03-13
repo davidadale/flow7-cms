@@ -5,8 +5,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 import play.mvc.Http;
-import play.mvc.Scope;
-
 
 public class Key implements Serializable{
     
@@ -78,15 +76,9 @@ public class Key implements Serializable{
     }
     
     public static Key get(){
-        String site = Scope.Session.current().get("_host");
-        String url = Http.Request.current().url;
-        Key key = null;
         
-        if( site!=null ){
-            key = new Key( site, url);
-        }else{
-            key = new Key( Http.Request.current().domain, url );
-        }
+        String url = Http.Request.current().url;
+        Key key = new Key( Host.get(), url );
 
         Http.Header etag = (Http.Header) 
             Http.Request.current().headers.get("if-none-match");        

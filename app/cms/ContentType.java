@@ -27,6 +27,8 @@ public class ContentType{
 	String path;
 	
     public static boolean isBinary( String type ){
+	    if ( type==null ){ return false; }
+	
 		return type.equals("image/gif") ||
 		type.equals("image/jpeg") ||
 		type.equals("image/png") ||

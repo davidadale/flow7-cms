@@ -11,6 +11,11 @@ import cms.*;
 import models.Resource;
 import java.util.Date;
 
+// added to handle template files.
+import play.templates.TemplateLoader;
+import play.templates.BaseTemplate;
+
+import play.Play;
 
 
 public class Resources extends Controller{
@@ -26,12 +31,10 @@ public class Resources extends Controller{
         Resource resource = ResourceCache.get( key );
         
         Logger.info("Resource retrieved from cache: " + (resource!=null) ); 
-        if( resource!=null ){
-        Logger.info("Resource is stale: " + resource.stale );            
-        }
+        if( resource!=null ){ Logger.info("Resource is stale: " + resource.stale ); }
 
         
-        if( resource==null || resource.stale ){
+        if( resource==null || resource.stale || Play.mode.isDev() ){
             resource = Resource.findByKey( key );
             
             Logger.info("Resource retrieved from storage: " + (resource!=null) );
@@ -49,10 +52,14 @@ public class Resources extends Controller{
                 if( resource.isBinary() ){
                     response.cacheFor( resource.etag  , "1d" , resource.lastUpdate.getTime() );	
                     renderBinary( new ByteArrayInputStream( resource.data ) );
-                }else{
+                }else if( resource.isHtml() ){
                     response.cacheFor( resource.etag  , "1d" , resource.lastUpdate.getTime() );	
-                    response.out.write( resource.data );    
+                    BaseTemplate bt = TemplateLoader.load(resource.path, new String( resource.data,"utf-8" ) );
+                    response.print( bt.render() );
                     response.out.flush();
+                }else{
+                    response.out.write( resource.data );    
+                    response.out.flush();                    
                 }
                 
             }

@@ -33,44 +33,42 @@ public class Resources extends Controller{
         Logger.info("Resource retrieved from cache: " + (resource!=null) ); 
         if( resource!=null ){ Logger.info("Resource is stale: " + resource.stale ); }
 
-        
-        if( resource==null || resource.stale || Play.mode.isDev() ){
-            resource = Resource.findByKey( key );
-            
-            Logger.info("Resource retrieved from storage: " + (resource!=null) );
-            
-            if( resource!=null ){ 
-                
-                if( resource.isBinary() ){
-                    ResourceCache.add( resource );
-                }
-                
-                response.contentType = resource.type;
-                
-                Logger.debug("Resource type is: " + response.contentType +
-                             " resource is binary " + resource.isBinary() +
-                             " resource data size is " + resource.data.length  );
-                
-                if( resource.isBinary() ){
-                    response.cacheFor( resource.etag  , "1d" , resource.lastUpdate.getTime() );	
-                    renderBinary( new ByteArrayInputStream( resource.data ) );
-                }else if( resource.isHtml() ){
-                    //response.cacheFor( resource.etag  , "1d" , resource.lastUpdate.getTime() );	
-                    BaseTemplate bt = TemplateLoader.load(resource.path, new String( resource.data,"utf-8" ) );
-                    response.print( bt.render() );
-                    response.out.flush();
-                }else{
-                    response.out.write( resource.data );    
-                    response.out.flush();                    
-                }
-                
-            }
-        
+        if( resource!=null && !resource.stale && !Play.mode.isDev() ){
+
+            notModified(); 
+
         }else{
             
-            if( resource == null ){ notFound(); }
+            resource = Resource.findByKey( key );
+            Logger.info("Resource retrieved from storage: " + (resource!=null) );
+            if( resource.isBinary() ){ ResourceCache.add( resource ); }    
             
-            notModified();            
+            response.contentType = resource.type;                    
+            Logger.debug("Resource type is: " + response.contentType +
+                         " resource is binary " + resource.isBinary() +
+                         " resource data size is " + resource.data.length  );       
+
+            if(resource==null ){
+
+                notFound();
+                             
+            }else if( resource.isBinary() ){
+                
+                response.cacheFor( resource.etag  , "200d" , resource.lastUpdate.getTime() );	
+                renderBinary( new ByteArrayInputStream( resource.data ) );
+                                
+            }else if( resource.isHtml() ){
+                
+                BaseTemplate bt = TemplateLoader.load(resource.path, new String( resource.data,"utf-8" ) );
+                response.print( bt.render() );
+                response.out.flush();
+                                
+            }else{
+                
+                response.out.write( resource.data );    
+                response.out.flush();                
+                
+            } 
         }
         
 

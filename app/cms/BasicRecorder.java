@@ -5,6 +5,7 @@ import java.io.OutputStream;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import play.Logger;
 
 public class BasicRecorder implements Recorder{
     
@@ -52,12 +53,9 @@ public class BasicRecorder implements Recorder{
     }
     
     public void flush(){
-		System.out.println( this.toString() );
+        Logger.info( this.toString() );
     }
     
-    /*public void playBack( StringBuf out ){
-        
-    }*/
     
     @Override
     public String toString(){

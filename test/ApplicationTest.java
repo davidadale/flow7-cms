@@ -14,6 +14,7 @@ import java.util.*;
 import java.io.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import jobs.*;
 
 public class ApplicationTest extends FunctionalTest {
 
@@ -27,30 +28,74 @@ public class ApplicationTest extends FunctionalTest {
         play.modules.siena.SienaFixtures.load( "data.yml" );
     }
     
-    /**
-    * This test is set to pull in 3 resources. One should be removed
-    * one will be updated and one will stay the same.
-    */
     @Test 
-    public void test_background_job_refresh(){
-        // look up a site
+    public void test_www_domain() throws Exception{
+
         Site site = Site.findBySiteHost("www.michaelbockoven.com");
-        
-        // use the site from above to start the background job to refresh
-        Response response = GET("/process/refresh/" + site.id);        
-        assertStatus(200, response);
-        
+        RefreshSiteJob job = new RefreshSiteJob( site.id );
+        job.doJob();
         
         List<Resource> files = Resource.findAllByHost("www.michaelbockoven.com");
         assertNotNull( files );
         assertTrue( files.size() == 3 );
-        assertTrue( files.contains( new Resource("www.michaelbockoven.com","index.html") ) );
-        assertTrue( files.contains( new Resource("www.michaelbockoven.com","about.html") ) );
-        assertTrue( files.contains( new Resource("www.michaelbockoven.com","newfile.html") ) );                
-        
-
+        assertTrue( files.contains( new Resource("www.michaelbockoven.com","/index.html") ) );
+        assertTrue( files.contains( new Resource("www.michaelbockoven.com","/about.html") ) );
+        assertTrue( files.contains( new Resource("www.michaelbockoven.com","/newfile.html") ) );                
         
     }
+    
+    
+    @Test 
+    public void test_naked_domain() throws Exception{
+        
+        Site site = Site.findBySiteHost("michaelbockoven.com");
+        RefreshSiteJob job = new RefreshSiteJob( site.id );
+        job.doJob(); 
+        
+        List<Resource> files = Resource.findAllByHost("michaelbockoven.com");
+        assertNotNull( files );
+        assertTrue( files.size() == 3 );
+        assertTrue( files.contains( new Resource("www.michaelbockoven.com","/index.html") ) );
+        assertTrue( files.contains( new Resource("www.michaelbockoven.com","/about.html") ) );
+        assertTrue( files.contains( new Resource("www.michaelbockoven.com","/newfile.html") ) );                
+        
+    }
+    
+    @Test 
+    public void test_dev_sub_domain() throws Exception{
+        
+        List<Resource> files = Resource.findAllByHost("dev.michaelbockoven.com");
+        assertNotNull( files );
+        assertTrue( files.size() == 2 );
+        assertTrue( files.contains( new Resource("dev.michaelbockoven.com","/index.html") ) );
+        assertTrue( files.contains( new Resource("dev.michaelbockoven.com","/about.html") ) );
+
+        
+    }   
+    
+    @Test     
+    public void test_get_dev_resource_using_key(){
+        Key key = new Key("dev.michaelbockoven.com","/index.html");
+        Resource r = Resource.findByKey(key);
+        assertNotNull( r );
+        assertTrue( new Resource("dev.michaelbockoven.com","/index.html").equals( r ) );
+    }
+    
+    @Test     
+    public void test_get_www_resource_using_key(){
+        Key key = new Key("www.michaelbockoven.com","/index.html");
+        Resource r = Resource.findByKey(key);
+        assertNotNull( r );
+        assertTrue( new Resource("www.michaelbockoven.com","/index.html").equals( r ) );
+    }    
+    
+    @Test     
+    public void test_get_naked_resource_using_key(){
+        Key key = new Key("michaelbockoven.com","/index.html");
+        Resource r = Resource.findByKey(key);
+        assertNotNull( r );
+        assertTrue( new Resource("www.michaelbockoven.com","/index.html").equals( r ) );
+    }    
     
     @Test
     public void test_html_store_and_retrieve(){

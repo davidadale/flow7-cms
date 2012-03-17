@@ -9,23 +9,45 @@
 Site(site1):
     username: davidadale
     host: www.michaelbockoven.com
-    repository: www.michaelbockoven.com
+    repository: michaelbockoven.com
+    
+Site(site2):
+    username: davidadale
+    host: michaelbockoven.com
+    repository: michaelbockoven.com
+    
+Site(site3):
+    username: davidadale
+    host: dev.michaelbockoven.com
+    repository: michaelbockoven.com
     
     
 Resource(resource1):
     type: text/html
-    path: index.html
+    path: /index.html
     host: www.michaelbockoven.com
     lastUpdate: 2011-12-14
 
 Resource(resource2):
     type: text/html
-    path: about.html
+    path: /about.html
     host: www.michaelbockoven.com
     lastUpdate: 2011-12-01
     
 Resource(resource3):
     type: text/html
-    path: oldFile.html
+    path: /oldFile.html
     host: www.michaelbockoven.com
     lastUpdate: 2011-12-14
+    
+Resource(resource4):
+    type: text/html
+    path: /index.html
+    host: dev.michaelbockoven.com
+    lastUpdate: 2012-03-13
+    
+Resource(resource5):
+    type: text/html
+    path: /about.html
+    host: dev.michaelbockoven.com
+    lastUpdate: 2012-03-13

@@ -17,16 +17,15 @@ import cms.*;
 public class Data extends Controller{
     
     public static void put(String collection) {
-        
         Map object = params.all();
-        
         System.out.println("Printing out the params list " + object );
         System.out.println("Collection that was parsed is " + collection);
-        
         object.remove("body");
         
+        CMSForm form = CMSForm.createFromMap( params.all() );
+        
         MongoDb db = new MongoDb();
-        db.save( collection, object );        
+        db.save( collection, form.fields );        
     }
 
     public static void get(String collection) {
@@ -35,10 +34,7 @@ public class Data extends Controller{
 
     public static void query( String collection, String query ){
         MongoDb db = new MongoDb();
-        
-        System.out.println("Collection is " + collection + " and query is " + query);
-        
-        List<String> items = db.query( collection, query );
+        List<String> items = Collections.EMPTY_LIST; //db.query( collection, query );
         renderText( items );
     }
     

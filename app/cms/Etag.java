@@ -1,6 +1,8 @@
 package cms;
 
 import java.security.*;
+import play.Logger;
+
 
 public class Etag{
     
@@ -25,8 +27,9 @@ public class Etag{
             return hashString.toString();            
             
         }catch(Exception e){
-            
+            Logger.error(e, "Problem creating etag.");
         }
+
         return "";
     }    
     

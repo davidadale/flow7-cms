@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoURI;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.BasicDBObject;
@@ -13,31 +14,33 @@ import com.mongodb.util.JSON;
 import java.util.List;
 import java.util.ArrayList;
 
+import play.Play;
+import play.Logger;
+
+import java.util.Set;
 
 public class MongoDb{
 
-    /*Mongo m = new Mongo( "127.0.0.1" , 27017 );
-    DB db = m.getDB( "clientData" );     
-    Map<String, String> params = Maps.newHashMap();
-    params.put("name","david");
-    params.put("phone","000-000-0000");
-    params.put("email","david2@d.com");
-    DBCollection coll = db.getCollection("testCollection");
-    
-    BasicDBObject doc = new BasicDBObject( params );
-    
-    coll.save( doc );*/
     DB  db = null;
+    String collection = "";
+    Integer limit = null;
+    Integer skip = null;
+    DBObject query = null;
+    List<Map> result = new ArrayList<Map>();
     
     public MongoDb(){
         try{
-            //heroku_app2423536:g1gf1usm7it68qehbju2753f55@ds029277.mongolab.com:29277/heroku_app2423536
-            //Mongo m = new Mongo( "127.0.0.1" , 27017 );
-            Mongo m = new Mongo("ds029277.mongolab.com", 29277 );
-            db = m.getDB("heroku_app2423536");            
-            db.authenticate("heroku_app2423536","g1gf1usm7it68qehbju2753f55".toCharArray() );
-        }catch(Exception e ){
             
+            if( Play.mode.isDev() ){
+                Mongo m = new Mongo();
+                db = m.getDB("clientData");
+            }else{
+                String uri = System.getenv("MONGOLAB_URI");
+                db = new MongoURI( uri ).connectDB();
+            }
+
+        }catch(Exception e ){
+            Logger.error(e, "Error creating a connection to mongodb");
         }
 
     }
@@ -47,25 +50,81 @@ public class MongoDb{
         DBCollection coll = db.getCollection( collection );
         coll.save( o );
     }
+
+    public MongoDb collection( String name ){
+        this.collection = name;
+        return this;
+    }
     
-    public List<String> query(String collection, String query){
-        List<String> result = new ArrayList<String>();
-        DBCursor cursor = db.getCollection( collection ).find( (DBObject) JSON.parse( query ) );
-        while( cursor.hasNext() ){
-            //Map i = cursor.next().toMap();
-            String object = JSON.serialize( cursor.next() );
-            System.out.println( object );
-            
-            result.add ( object  );
+    public MongoDb find( String query ){
+        if( query!=null ){
+            MongoQuery q = new MongoQuery( query );
+            this.query = q.getDBObject();
+        }
+        return this;
+    }
+    
+    public MongoDb limit(Integer limit){
+        if( limit!=null ){
+            this.limit = limit;
+        }
+        return this;
+    }
+    
+    public MongoDb skip(Integer skip){
+        if( skip!=null ){
+            this.skip = skip;
+        }
+        return this;
+    }
+    
+    public List<Map> fetch(){
+        if( query!=null && limit!=null ){
+            queryWithLimit();
+        }else if( limit!=null ){
+            allWithLimit();
+        }else if( query!=null ){
+            query();
+        }else{
+            all();
         }
         return result;
     }
-    
-    public List<String> list( String query ){
-        return null;
+    protected void all(){
+        DBCursor cursor = db.getCollection( collection ).find();
+        if( skip!=null ){ cursor.skip( skip ); }
+        while( cursor.hasNext() ){
+            Map record = cursor.next().toMap();
+            result.add ( record  );
+        }        
     }
     
-    public String get( String id ){
-        return null;
+    protected void allWithLimit(){
+        DBCursor cursor = db.getCollection( collection ).find().limit(limit);
+        if( skip!=null ){ cursor.skip( skip ); }
+        while( cursor.hasNext() ){
+            Map record = cursor.next().toMap();
+            result.add ( record  );
+        }        
+    }    
+    
+    protected void query(){
+        DBCursor cursor = db.getCollection( collection ).find( query );
+        if( skip!=null ){ cursor.skip( skip ); }        
+        while( cursor.hasNext() ){
+            Map record = cursor.next().toMap();
+            result.add ( record  );
+        }        
     }
+    
+    protected void queryWithLimit(){
+        DBCursor cursor = db.getCollection( collection ).find( query ).limit( limit );
+        if( skip!=null ){ cursor.skip( skip ); }        
+        while( cursor.hasNext() ){
+            Map record = cursor.next().toMap();
+            result.add ( record  );
+        }
+    }
+    
+
 }

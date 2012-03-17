@@ -22,7 +22,6 @@ public class ContentType{
 		mimes.put( "png",  "image/png");
 		mimes.put( "ico",  "image/x-icon");
 		mimes.put( "pdf", "application/pdf" );
-		//mimes.put("", "");												
 	}
 	
 	String path;
@@ -39,7 +38,13 @@ public class ContentType{
     }
 
 	public static boolean isImage( Resource resource ){
-	    return isBinary( resource.type );
+	    String type = resource.type;
+	    if ( type==null ){ return false; }
+	
+		return type.equals("image/gif") ||
+		type.equals("image/jpeg") ||
+		type.equals("image/png") ||
+		type.equals("image/x-icon");
 	}
 	
 	public static boolean isStatic( Resource resource ){

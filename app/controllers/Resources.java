@@ -17,7 +17,6 @@ import play.templates.BaseTemplate;
 
 import play.Play;
 
-
 public class Resources extends Controller{
     
     private static final String FORMAT = "%v %h %u [%t] \"%r\" %s %b \"%ref\" \"%ua\" %rt";
@@ -25,7 +24,6 @@ public class Resources extends Controller{
     public static void serve() throws IOException{
         
         Key key = Key.get();
-        
         Logger.info("Request for resource " + key.toString() );
         
         Resource resource = ResourceCache.get( key );
@@ -40,20 +38,16 @@ public class Resources extends Controller{
         }else{
             
             resource = Resource.findByKey( key );
-            Logger.info("Resource retrieved from storage: " + (resource!=null) );
-            if( resource.isBinary() ){ ResourceCache.add( resource ); }    
+            if(resource==null ){ notFound(); }            
             
             response.contentType = resource.type;                    
             Logger.debug("Resource type is: " + response.contentType +
                          " resource is binary " + resource.isBinary() +
                          " resource data size is " + resource.data.length  );       
 
-            if(resource==null ){
-
-                notFound();
-                             
-            }else if( resource.isBinary() ){
+            if( resource.isBinary() ){
                 
+                ResourceCache.add( resource ); 
                 response.cacheFor( resource.etag  , "200d" , resource.lastUpdate.getTime() );	
                 renderBinary( new ByteArrayInputStream( resource.data ) );
                                 
@@ -76,7 +70,7 @@ public class Resources extends Controller{
     
     @Catch(IOException.class)
     public static void bad(){
-        
+        Logger.error("Something went wrong because IOException was thrown and caught in method 'bad()'");
     }
     
     

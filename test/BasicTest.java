@@ -123,6 +123,27 @@ public class BasicTest extends UnitTest {
         
     }
     
+    @Test
+    public void test_find_sub_domain(){
+        String host = "dev.imagine1.org";
+        String sub = Host.getSubDomain( host );
+        assertEquals( "dev", sub);
+    }
+    
+    @Test
+    public void test_long_sub_domain(){
+        String host = "s1.dev.michaelbockoven.com";
+        String sub = Host.getSubDomain( host );
+        assertEquals("s1.dev" , sub );
+    }
+    
+    @Test
+    public void test_naked_domain(){
+        String host = "imagine1.org";
+        String sub = Host.getSubDomain( host );
+        assertEquals( "", sub );
+    }
+    
     /*@Test
     public void test_recorder_mock(){
         Recorder rec = RecorderFactory.get();

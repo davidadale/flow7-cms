@@ -41,6 +41,7 @@ public class DevelopmentFetchProvider implements FetchProvider{
     protected void walkDirectory( File file, Site site, List<Resource> resources ){
         
         if( file.isDirectory() ){
+            if(".git".equals( file.getName() ) ){ return; }
             for(File temp: file.listFiles() ){
                 walkDirectory( temp, site, resources );    
             }

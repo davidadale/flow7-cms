@@ -15,10 +15,9 @@ public class Key implements Serializable{
     public Key(String host, String path){
         
         if( isEmpty(host) ){
-            throw new CMSException("Can not create a key with an empty host.");
+            throw new CMSException("Cannot create a key with an empty host.");
         }
         
-        //this.host = host.replace("/","");
         this.host = host;
         this.path = getPath( path );
     }

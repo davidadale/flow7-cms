@@ -2,6 +2,7 @@ package models;
 
 import siena.*;
 import java.util.Date;
+import cms.Host;
 
 public class Site extends Model{
 
@@ -46,7 +47,10 @@ public class Site extends Model{
 	public static Site findBySiteHost(String host){
 		Site site = all().filter("host",host).get();
 		if( site == null ){
-		    if( host.startsWith("www") ){
+		    String sub = Host.getSubDomain( host );
+		    if( sub==null || sub.length() ==0 ){
+		        site = all().filter("host", "www." + host ).get();
+		    }else if( "www".equals( sub ) ){
 		        site = all().filter("host", host.substring( 4 )   ).get();
 		    }
 		}

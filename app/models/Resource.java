@@ -93,18 +93,18 @@ public class Resource extends Model implements Serializable{
         return Model.all(Resource.class);
     }    
     
-	/*public static Site findBySiteName(String name){
-		Site site = all().filter("name",name).get();
-		if( site == null ){
-		    if( name.startsWith("www") ){
-		        site = all().filter("name", name.substring( 4 )   ).get();
-		    }
-		}
-		return site;
-	}*/    
-    
     public static List<Resource> findAllByHost(String host){
-        return all().filter("host",host).fetch();
+        List<Resource> results = all().filter("host",host).fetch();
+        if( results.isEmpty() ){
+            String subdomain = Host.getSubDomain( host );
+            if( subdomain==null || subdomain.length()==0){
+                results = all().filter("host","www." + host ).fetch();
+            }
+            if( "www".equals( subdomain) ){
+                results = all().filter("host",host.substring(4) ).fetch();
+            }
+        }
+        return results;
     }
     
     public static Resource findByHostAndPath(String host, String path){
@@ -117,22 +117,21 @@ public class Resource extends Model implements Serializable{
     
     public static Resource findByKey( Key key ){
         Resource r = findByHostAndPath( key.host, key.path );
-        // handle necked domains
-        if( r==null &&  
-            key.host!=null && 
-            !key.host.startsWith("www.") ){
-            r = findByHostAndPath( "www." + key.host, key.path );
-        }
         
-        if( r==null &&
-            key.host!=null &&
-            key.host.startsWith("www.") ){
-                
-            r = findByHostAndPath( key.host.substring(4), key.path );    
+        if( r==null ){
+            String subdomain = Host.getSubDomain( key.host );
+            // if domain is necked then try to pull resources for www
+            if( subdomain==null || subdomain.length()==0){
+                r = findByHostAndPath( "www." + key.host, key.path );
+            }
+            if( "www".equals( subdomain ) ) {
+                r = findByHostAndPath(  key.host.substring( 4 ) , key.path );
+            }            
         }
-        
+
         return r;
     }
+    
 
     
 }

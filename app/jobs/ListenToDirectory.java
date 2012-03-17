@@ -17,7 +17,7 @@ public class ListenToDirectory extends Job{
     
     public void doJob() {
         
-        if( Play.mode.isDev() ){
+        if( "live".equals( Play.id ) ){
             
             String siteLocation = System.getProperty("site");
             if( siteLocation==null || siteLocation.length() == 0 ){

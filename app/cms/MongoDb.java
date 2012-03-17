@@ -38,9 +38,11 @@ public class MongoDb{
                 //String uri = System.getenv("MONGOLAB_URI");
                 //            mongodb://heroku_app2423536:g1gf1usm7it68qehbju2753f55@ds029277.mongolab.com:29277/heroku_app2423536
                 String uri = "mongodb://heroku_app2423536:g1gf1usm7it68qehbju2753f55@ds029277.mongolab.com:29277/heroku_app2423536";
-                MongoURI m = new MongoURI( uri );
-                db = m.connectDB();
-                System.out.println("Get user name and password " + m.getUsername() + " " + m.getPassword() );
+                DbURI muri = new DbURI( uri );
+                Mongo mongo = new Mongo( muri.host, muri.port );
+                db = mongo.getDB( muri.database );
+                db.authenticate( muri.username, muri.password.toCharArray() );
+                //db = m.connectDB();
             //}
 
         }catch(Exception e ){

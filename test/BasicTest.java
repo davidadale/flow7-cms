@@ -151,6 +151,19 @@ public class BasicTest extends UnitTest {
         assertTrue( )
     }*/
     
+    @Test
+    public void test_mongo_db_uri(){
+        
+            String prop = "mongodb://testUser:testPass@ds029277.mongolab.com:29277/heroku_app123";
+            MongoDbURI uri = new MongoDbURI( prop );
+            assertEquals("testUser",uri.username);
+            assertEquals("testPass", uri.password);
+            assertEquals("ds029277.mongolab.com", uri.host);
+            assertTrue( 29277 == uri.port );
+            assertEquals("heroku_app123", uri.database );
+        
+    }
+    
     
 
 }

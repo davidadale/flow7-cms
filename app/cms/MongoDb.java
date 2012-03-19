@@ -31,19 +31,17 @@ public class MongoDb{
     public MongoDb(){
         try{
             
-            /*if( Play.mode.isDev() ){
+            if( Play.mode.isDev() ){
                 Mongo m = new Mongo();
                 db = m.getDB("clientData");
-            }else{*/
-                //String uri = System.getenv("MONGOLAB_URI");
+            }else{
                 //            mongodb://heroku_app2423536:g1gf1usm7it68qehbju2753f55@ds029277.mongolab.com:29277/heroku_app2423536
-                String uri = "mongodb://heroku_app2423536:g1gf1usm7it68qehbju2753f55@ds029277.mongolab.com:29277/heroku_app2423536";
-                DbURI muri = new DbURI( uri );
+                String uri = System.getenv("MONGOLAB_URI");
+                MongoDbURI muri = new MongoDbURI( uri );
                 Mongo mongo = new Mongo( muri.host, muri.port );
                 db = mongo.getDB( muri.database );
                 db.authenticate( muri.username, muri.password.toCharArray() );
-                //db = m.connectDB();
-            //}
+            }
 
         }catch(Exception e ){
             Logger.error(e, "Error creating a connection to mongodb");

@@ -68,6 +68,22 @@ public class Resources extends Controller{
 
     }
     
+    public static void viewResource(Long id) throws IOException{
+        Resource resource = Resource.findById( id );
+        if( resource.isBinary() ){
+            
+            ResourceCache.add( resource ); 
+            response.cacheFor( resource.etag  , "200d" , resource.lastUpdate.getTime() );	
+            renderBinary( new ByteArrayInputStream( resource.data ) );
+                            
+        }else{
+            
+            response.out.write( resource.data );    
+            response.out.flush();                
+            
+        }        
+    }
+    
     @Catch(IOException.class)
     public static void bad(){
         Logger.error("Something went wrong because IOException was thrown and caught in method 'bad()'");

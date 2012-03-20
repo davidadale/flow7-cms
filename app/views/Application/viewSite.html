@@ -53,7 +53,7 @@
                         <tbody>
                             #{list items:resources, as:'r'}
                           <tr>
-                            <td>${r.path}</td>
+                            <td><a href="@{Resources.viewResource(r.id)}" target="_blank">${r.path}</a></td>
                             <td>${r.type}</td>
                             <td>${r.lastUpdate}</td>
                           </tr>

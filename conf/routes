@@ -13,10 +13,11 @@ GET     /_cms/site/clear                        Application.removeResources
 GET     /_cms/site/delete                       Application.removeSite
 GET     /_cms/site/{id}/preview                 Application.preview
 GET     /_cms/site/{id}/refresh                 Application.refresh
+GET     /_cms/resource/{id}                     Resources.viewResource
 GET     /_cms/data/{collection}                 Data.get
 POST    /_cms/data/{collection}                 Data.put
 GET     /_cms/data/q/{collection}               Data.query
-POST     /_cms/form/{collection}                 Form.post
+POST     /_cms/form/{collection}                Form.post
     
 # Ignore favicon requests
 GET     /favicon.ico                            404

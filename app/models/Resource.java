@@ -93,6 +93,10 @@ public class Resource extends Model implements Serializable{
         return Model.all(Resource.class);
     }    
     
+    public static Resource findById(Long id){
+        return all().filter("id", id).get();
+    }
+    
     public static List<Resource> findAllByHost(String host){
         List<Resource> results = all().filter("host",host).fetch();
         if( results.isEmpty() ){

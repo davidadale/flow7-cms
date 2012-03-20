@@ -15,8 +15,9 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import java.util.*;
 import play.mvc.Http.Request;
-import play.mvc.Scope.RenderArgs;
-import play.mvc.Scope.Flash;
+
+import java.util.Random;
+
 
 @FastTags.Namespace("cms") 
 public class CmsTags extends FastTags{ 
@@ -42,6 +43,24 @@ public class CmsTags extends FastTags{
             out.print( "active" );
         }
     }
+    /**
+    * This is a utility method tag that allows the body content to be repeated a certain
+    * number of times with a random integer as one of the parameters.
+    *
+    */
+    public static void _randomList(Map<?, ?> args, Closure body, PrintWriter out, 
+       ExecutableTemplate template, int fromLine){
+           
+           Integer times = (Integer)args.get("times");
+           Integer max = (Integer)args.get("max");
+           Random random = new Random();
+           
+           for(int i=0;i<times;i++){
+               body.setProperty("index", i );
+               body.setProperty("random", random.nextInt( max ) );
+               body.call();
+           }
+    }
     
     public static void _collection(Map<?, ?> args, Closure body, PrintWriter out, 
        ExecutableTemplate template, int fromLine){
@@ -49,13 +68,14 @@ public class CmsTags extends FastTags{
         String name = (String) args.get("name");
         String queryString = (String) args.get("query");
         Integer limit = (Integer)args.get("limit");
+        Integer skip = (Integer)args.get("skip");
         
         String as = (String) args.get("as");
         if( as==null || as.length()==0 ){ as = "item"; }
 
         MongoDb db = new MongoDb();
         List<Map> result = null;
-        result = db.collection( name ).find( queryString ).limit( limit ).fetch();
+        result = db.collection( name ).find( queryString ).limit( limit ).skip(skip).fetch();
 
         for( Map row: result ){
             body.setProperty(as,row);

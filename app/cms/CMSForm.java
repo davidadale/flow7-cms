@@ -20,6 +20,8 @@ public class CMSForm{
                 if( value instanceof String[] ){
                     if( ((String[])value).length > 1 ){
                         form.fields.put( remove_ (key), value );
+                    }else{
+                        form.fields.put( remove_ (key ), ((String[])value)[0] );
                     }
                 }else{
                     form.fields.put( remove_ (key), value );
@@ -30,7 +32,9 @@ public class CMSForm{
         return form;
     }
     
-    
+    public String toString(){
+        return String.valueOf( fields );
+    }
     
     protected static String remove_( String key ){
         if( key.startsWith("_") && !"_id".equals( key ) ){

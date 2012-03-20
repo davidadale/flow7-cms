@@ -53,6 +53,8 @@ public class Application extends Controller {
     public static void removeSite( Long id ){
         Site site = Site.findById( id );
         site.delete();
+        Resource.deleteAllByHost( site.host );
+        
         ResourceCache.dump();
         sites();
         

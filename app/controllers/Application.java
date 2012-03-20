@@ -8,7 +8,7 @@ import java.util.*;
 import models.*;
 import jobs.*;
 
-import cms.Key;
+import cms.*;
 
 public class Application extends Controller {
 
@@ -53,6 +53,7 @@ public class Application extends Controller {
     public static void removeSite( Long id ){
         Site site = Site.findById( id );
         site.delete();
+        ResourceCache.dump();
         sites();
         
     }

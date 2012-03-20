@@ -13,6 +13,10 @@ public class ResourceCache{
         return r;
     }
     
+    public static void dump(){
+        Cache.clear();
+    }
+    
     public static void add( Resource resource ){
         Cache.add( resource.getKey().toString(), resource );
     }

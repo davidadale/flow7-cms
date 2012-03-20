@@ -9,8 +9,8 @@ GET     /_cms/site/{id}/edit                    Application.editSite
 GET     /_cms/site/{id}                         Application.viewSite
 POST    /_cms/site/save                         Application.saveSite
 GET     /_cms/site/refresh                      Application.refresh
-GET     /_cms/site/clear                        Application.removeResources
-GET     /_cms/site/delete                       Application.removeSite
+GET     /_cms/site/{id}/clear                   Application.removeResources
+GET     /_cms/site/{id}/delete                  Application.removeSite
 GET     /_cms/site/{id}/preview                 Application.preview
 GET     /_cms/site/{id}/refresh                 Application.refresh
 GET     /_cms/resource/{id}                     Resources.viewResource

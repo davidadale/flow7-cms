@@ -43,10 +43,10 @@ public class Application extends Controller {
         sites();
     }
     
-    public static void removeResources( String host  ){
-        Site site = Site.findBySiteHost( host );
+    public static void removeResources( Long id  ){
+        Site site = Site.findById( id );
         site.finishRefresh();
-        Resource.deleteAllByHost( host );
+        Resource.deleteAllByHost( site.host );
         sites();
     }
     

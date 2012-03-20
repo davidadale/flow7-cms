@@ -19,6 +19,7 @@
                       <h1>${site.host}</h1>
                       <p>
                           <a href="/_cms/site/${site.id}/edit">Edit</a>
+                          <a href="/_cms/site/${site.id}/delete" onclick="javascript:return confirm('are you sure?');">Delete</a>                          
                       </p>
                       <ul>
                           <li><strong>Primary Site: </strong>${site.host}</li>
@@ -32,6 +33,7 @@
                                   <dd>
                                       <a href="/_cms/site/${site.id}/refresh" class="btn">Refresh</a>
                                       <a href="/_cms/site/${site.id}/preview" class="btn" target="_blank">View Site</a>                                      
+                                      <a href="/_cms/site/${site.id}/clear" onclick="javascript: return confirm('are you sure?');" class="btn">Clear</a>
                                   </dd>
                               </dl>
                           </li>

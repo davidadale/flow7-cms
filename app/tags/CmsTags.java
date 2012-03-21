@@ -99,7 +99,7 @@ public class CmsTags extends FastTags{
                }
                
                if(resource!=null ){
-                   BaseTemplate.layout.set( (BaseTemplate) TemplateLoader.load(resource.path, new String( resource.data,"utf-8" ) ) );                   
+                   BaseTemplate.layout.set( (BaseTemplate) TemplateLoader.load(resource.path, new String( resource.data,"utf-8" ),true ) );                   
                }
 
            } catch (TemplateNotFoundException e) {

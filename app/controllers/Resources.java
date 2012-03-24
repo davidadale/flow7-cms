@@ -24,12 +24,14 @@ public class Resources extends Controller{
     public static void serve() throws IOException{
         
         Key key = Key.get();
-        Logger.info("Request for resource " + key.toString() );
+        
+        Logger.debug("Request for resource " + key.toString() );
         
         Resource resource = ResourceCache.get( key );
         
-        Logger.info("Resource retrieved from cache: " + (resource!=null) ); 
-        if( resource!=null ){ Logger.info("Resource is stale: " + resource.stale ); }
+        Logger.debug("Resource retrieved from cache: " + (resource!=null) ); 
+        
+        if( resource!=null ){ Logger.debug("Resource is stale: " + resource.stale ); }
 
         if( resource!=null && !resource.stale && !Play.mode.isDev() ){
 
@@ -121,7 +123,7 @@ public class Resources extends Controller{
         line = StringUtils.replaceOnce( line, "%ua", (userAgent!=null)?userAgent.value():"" );                                                        
         line = StringUtils.replaceOnce( line, "%rt", String.valueOf(requestProcessingTime) + " ms");                                                                        
         
-        System.out.println(  line );
+        Logger.debug(  line );
     }    
     
 }

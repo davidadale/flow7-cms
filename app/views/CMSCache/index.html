@@ -1,0 +1,28 @@
+#{extends 'main.html'/}
+#{set title: 'CMS Cache'/}
+#{set active:'cache'/}
+
+
+<div class="container">
+    <div class="row">
+        <div class="span9">
+            <a href="/_cms/cache/dump" class="btn"><i class="icon-plus"></i> Dump Cache</a>
+            <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Cache Item</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    #{list items:keys, as:'key'}
+                  <tr>
+                    <td>${key}</td>
+                    <td><a href="@{CMSCache.remove(key)}">Remove</a></td>
+                  </tr>
+                  #{/list}
+                </tbody>
+              </table>            
+        </div>    
+    </div>
+</div>    

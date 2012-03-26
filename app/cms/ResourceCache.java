@@ -1,9 +1,11 @@
 package cms;
 
-import play.cache.Cache;
+import play.cache.*;
 import models.Resource;
+import java.util.List;
 
-public class ResourceCache{
+
+public class ResourceCache {
     
     public static Resource get( Key key ){
         Resource r = (Resource) Cache.get( key.toString() );
@@ -22,8 +24,15 @@ public class ResourceCache{
     }
     
     public static void remove(Resource resource){
-        Cache.delete( resource.getKey().toString() );
+        remove( resource.getKey().toString() );
     }
     
+    public static void remove(String key){
+        Cache.delete( key );
+    }
+    
+    public static List keys(){
+        return ((EHCacheExtension)Cache.cacheImpl).getKeys();
+    }
     
 }

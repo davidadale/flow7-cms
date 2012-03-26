@@ -10,7 +10,7 @@
         <ul class="nav nav-tabs">
           <li class="active"><a href="#lA" data-toggle="tab">Site Info</a></li>
           <li><a href="#lB" data-toggle="tab">Resources</a></li>
-          <li><a href="#lC" data-toggle="tab">Site Users</a></li>
+          <li><a href="#lC" data-toggle="tab">Request Transactions</a></li>
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="lA">
@@ -71,15 +71,17 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                           <tr>
-                            <th>Username</th>
-                            <th>enabled</th>
+                            <th>Requested</th>
+                            <th>URL</th>
+                            <th>Resource ID</th>
                           </tr>
                         </thead>
                         <tbody>
-                            #{list items:users, as:'u'}
+                            #{list items:transactions, as:'t'}
                           <tr>
-                            <td>${u.username}</td>
-                            <td>${u.enabled}</td>
+                            <td>${t.requested}</td>
+                            <td>${t.url}</td>
+                            <td><a href="@{Resources.viewResource(t.resourceId)}" target="_blank">${t.resourceId}</a></td>                            
                           </tr>
                           #{/list}
                         </tbody>

@@ -4,6 +4,9 @@
 
 # Home page
 GET     /_cms                                   Application.sites
+GET     /_cms/cache                             CMSCache.index
+GET     /_cms/cache/item/remove                 CMSCache.remove
+GET     /_cms/cache/dump                        CMSCache.dump
 GET     /_cms/site/create                       Application.addSite
 GET     /_cms/site/{id}/edit                    Application.editSite
 GET     /_cms/site/{id}                         Application.viewSite

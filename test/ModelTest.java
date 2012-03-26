@@ -8,7 +8,7 @@ import play.modules.siena.SienaFixtures;
 
 import models.Resource;
 import models.Site;
-
+import cms.*;
 
 public class ModelTest extends UnitTest {
 
@@ -60,5 +60,36 @@ public class ModelTest extends UnitTest {
         assertEquals( s.status, "active" );
     }    
     
+    @Test
+    public void test_resource_find_by_host_and_path(){
+        Resource resource = new Resource("www.imagine1.org","/index.html");
+        resource.save();
+        Resource result = Resource.findByHostAndPath( "www.imagine1.org","/index.html" );
+        assertNotNull ( result );
+    }
+    
+    @Test
+    public void test_resource_find_by_key(){
+        Resource resource = new Resource("www.imagine1.org","/index.html");
+        resource.save();
+        Resource result = Resource.findByKey( new Key("www.imagine1.org", "index.html") );
+        assertNotNull ( result );
+    }
+    
+    @Test
+    public void test_naked_resource_find_by_key(){
+        Resource resource = new Resource("imagine1.org","/index.html");
+        resource.save();
+        Resource result = Resource.findByKey( new Key("www.imagine1.org", "index.html") );
+        assertNotNull ( result );
+    }    
+    
+    @Test
+    public void test_resource_find_by_key_without_www(){
+        Resource resource = new Resource("www.imagine1.org","/index.html");
+        resource.save();
+        Resource result = Resource.findByKey( new Key("imagine1.org", "index.html") );
+        assertNotNull ( result );
+    }    
     
 }

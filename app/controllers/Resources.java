@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import cms.*;
 import models.Resource;
+import models.RequestTransaction;
 import java.util.Date;
 
 // added to handle template files.
@@ -25,6 +26,8 @@ public class Resources extends Controller{
         
         Key key = Key.get();
         
+        RequestTransaction rt = new RequestTransaction( key );
+        
         Logger.debug("Request for resource " + key.toString() );
         
         Resource resource = ResourceCache.get( key );
@@ -34,18 +37,20 @@ public class Resources extends Controller{
         if( resource!=null ){ Logger.debug("Resource is stale: " + resource.stale ); }
 
         if( resource!=null && !resource.stale && !Play.mode.isDev() ){
-
+            rt.setResource ( resource ).save();
             notModified(); 
-
         }else{
-            
+            // this find by key may be problematic... need lots of tests on this.
             resource = Resource.findByKey( key );
-            if(resource==null ){ notFound(); }            
+            if(resource==null ){ rt.setNotFound(true); notFound(); }            
+            
+            rt.setResource( resource );            
             
             response.contentType = resource.type;                    
             Logger.debug("Resource type is: " + response.contentType +
-                         " resource is binary " + resource.isBinary() +
-                         " resource data size is " + resource.data.length  );       
+                         " resource is binary " + resource.isBinary() );
+                         // check for null
+                         //" resource data size is " + resource.data!=nulllength  );       
 
             if( resource.isBinary() ){
                 
@@ -65,6 +70,7 @@ public class Resources extends Controller{
                 response.out.flush();                
                 
             } 
+            rt.save();
         }
         
 

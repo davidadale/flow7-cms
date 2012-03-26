@@ -92,6 +92,13 @@ public class BasicTest extends UnitTest {
         assertTrue( resource.hashCode() == rhs.hashCode() );
     }
     
+    @Test 
+    public void test_key_to_string(){
+        Key  key = new Key("michaelbockoven.com","index.html");
+        assertEquals("http://michaelbockoven.com/index.html", key.toString() );
+    }
+    
+    
     @Test
     public void test_list_contains_resource(){
         Resource resource = new Resource();

@@ -93,6 +93,10 @@ public class Resource extends Model implements Serializable{
         return Model.all(Resource.class);
     }    
     
+	public static int count(){
+		return all().count();
+	}    
+    
     public static Resource findById(Long id){
         return all().filter("id", id).get();
     }
@@ -111,16 +115,18 @@ public class Resource extends Model implements Serializable{
         return results;
     }
     
+    public static void deleteAllByHost( String host ){
+        all().filter("host",host).delete();
+    }
+
     public static Resource findByHostAndPath(String host, String path){
         return all().filter("host",host).filter("path",path).get();
     }
     
-    public static void deleteAllByHost( String host ){
-        all().filter("host",host).delete();
-    }
-    
     public static Resource findByKey( Key key ){
+
         Resource r = findByHostAndPath( key.host, key.path );
+        
         
         if( r==null ){
             String subdomain = Host.getSubDomain( key.host );

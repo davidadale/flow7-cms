@@ -7,6 +7,7 @@ import java.util.*;
 
 import models.*;
 import jobs.*;
+import play.cache.Cache;
 
 import cms.*;
 
@@ -30,7 +31,8 @@ public class Application extends Controller {
     public static void viewSite(Long id){
         Site site = Site.findById( id );
         List<Resource> resources = Resource.findAllByHost( site.host );
-        render(site, resources);
+        List<RequestTransaction> transactions = RequestTransaction.findByHost( site.host );
+        render(site, resources, transactions);
     }
     
     public static void saveSite(Site site){
@@ -54,11 +56,16 @@ public class Application extends Controller {
         Site site = Site.findById( id );
         site.delete();
         Resource.deleteAllByHost( site.host );
-        
         ResourceCache.dump();
         sites();
-        
     }
+    
+    public static void removeResourceFromCache(Long siteId, Long resourceId ){
+        Resource r = Resource.findById( resourceId );
+        ResourceCache.remove( r );
+        viewSite( siteId );
+    }
+    
     
     public static void preview(Long id ){
         

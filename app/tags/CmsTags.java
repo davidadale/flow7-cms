@@ -17,6 +17,7 @@ import java.util.*;
 import play.mvc.Http.Request;
 
 import java.util.Random;
+import java.lang.reflect.Method;
 
 
 @FastTags.Namespace("cms") 
@@ -81,6 +82,39 @@ public class CmsTags extends FastTags{
             body.setProperty(as,row);
             body.call();            
         }            
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static void _include(Map<?, ?> args, Closure body, PrintWriter out, 
+       ExecutableTemplate template, int fromLine){
+           try {
+               if (!args.containsKey("arg") || args.get("arg") == null) {
+                   throw new TemplateExecutionException(template.template, fromLine, "Specify a template name", new TagInternalException("Specify a template name"));
+               }
+               String path = args.get("arg").toString();
+
+               Key key = new Key( Host.get(), path   );
+               Resource resource = ResourceCache.get( key );
+
+               if( resource==null ){
+                   resource = Resource.findByKey( key );
+               }
+
+               BaseTemplate t = (BaseTemplate) TemplateLoader.load(resource.path, new String( resource.data,"utf-8" ),true );
+               t.compile();
+               //Method internalRender = BaseTemplate.class.
+                 //      getDeclaredMethod("internalRender", Map.class);
+               //internalRender.setAccessible(true);
+               
+               Map<String, Object> newArgs = new HashMap<String, Object>();
+               newArgs.putAll(template.getBinding().getVariables());
+               newArgs.put("_isInclude", true);
+               out.write( t.render( newArgs ) );
+           } catch (TemplateNotFoundException e) {
+               throw new TemplateNotFoundException(e.getPath(), template.template, fromLine);
+           } catch( Exception e ){
+               e.printStackTrace();
+           }           
     }
     
     public static void _extends(Map<?, ?> args, Closure body, PrintWriter out, 

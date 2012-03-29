@@ -34,8 +34,8 @@ public class Data extends Controller{
 
     public static void query( String collection, String query ){
         MongoDb db = new MongoDb();
-        List<String> items = Collections.EMPTY_LIST; //db.query( collection, query );
-        renderText( items );
+        List<Map> items = db.collection(collection).find( query ).fetch();
+        renderJSON( items );
     }
     
 }

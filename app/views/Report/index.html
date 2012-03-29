@@ -1,0 +1,25 @@
+#{extends 'main.html'/}
+
+<div class="container">
+<table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>First</th>
+        <th>Last</th>
+      </tr>
+    </thead>
+    <tbody id="userList">
+    </tbody>
+</table>
+</div>
+<script>
+    $.get('/_cms/data/q/members',function(data){
+        alert( data )
+        $(data).each( function(){
+            alert( this );
+            $("#userList").append("<tr><td>"+this.first+"</td><td>"+this.last+"</td></tr>")
+        });
+    },'json');
+</script>
+
+

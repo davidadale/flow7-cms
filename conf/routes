@@ -20,6 +20,7 @@ GET     /_cms/resource/{id}                     Resources.viewResource
 GET     /_cms/data/{collection}                 Data.get
 POST    /_cms/data/{collection}                 Data.put
 GET     /_cms/data/q/{collection}               Data.query
+GET     /_cms/report/members                    Report.index
 POST     /_cms/form/{collection}                Form.post
     
 # Ignore favicon requests

@@ -60,7 +60,8 @@ public class Resources extends Controller{
                                 
             }else if( resource.isHtml() ){
                 
-                BaseTemplate bt = TemplateLoader.load(resource.getKey().toString(), new String( resource.data,"utf-8" ) );
+                //BaseTemplate bt = TemplateLoader.load(resource.getKey().toString(), new String( resource.data,"utf-8" ) );
+                BaseTemplate bt = TemplateLoader.loadString( new String( resource.data,"utf-8" ) );                
                 response.print( bt.render() );
                 response.out.flush();
                                 

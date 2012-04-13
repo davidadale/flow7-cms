@@ -18,6 +18,10 @@ public class Site extends Model{
     public String providerUsername;
     public String providerPassword;
     
+    public String emailHost;
+    public String emailUsername;
+    public String emailPassword;
+    
     public void startRefresh(){
         status = "refreshing";
         lastRefresh = new Date();

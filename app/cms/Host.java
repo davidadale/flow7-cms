@@ -1,6 +1,5 @@
 package cms;
 
-
 import play.mvc.Scope;
 import play.mvc.Http;
 
@@ -9,7 +8,7 @@ public class Host{
     public static String get(){
         String host = Scope.Session.current().get("_host");
         if( host==null ){
-            host = Http.Request.current().domain;
+            host = Http.Request.current().host;
         }        
         return host;
     }

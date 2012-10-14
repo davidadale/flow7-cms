@@ -12,9 +12,21 @@ import models.*;
 import java.util.Date;
 import cms.*;
 
+/**
+ * This job is only used for live development. By setting the
+ * id to 'live' it will allow the system to watch a directory 
+ * and refresh the site as the files change. If the site is not
+ * being developed locally this job will have no effect on the 
+ * system.
+ */
 @OnApplicationStart(async=true)
 public class ListenToDirectory extends Job{
     
+    /**
+     * Check to see if the site is in live mode and then set the 
+     * Fetcther to use a development version pulling from the local
+     * file system.
+     */
     public void doJob() {
         
         if( "live".equals( Play.id ) ){
@@ -45,7 +57,7 @@ public class ListenToDirectory extends Job{
      protected void watchDirectory(final String siteLocation ){
          try{
              FileSystemManager fsManager = VFS.getManager();
-              FileObject listendir = fsManager.resolveFile( siteLocation  );
+              FileObject listendir = fsManager.resolveFile( (new File(siteLocation)).getAbsolutePath()  );
 
 
               DefaultFileMonitor fm = new DefaultFileMonitor(new FileListener(){

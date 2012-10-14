@@ -73,15 +73,19 @@ public class CmsTags extends FastTags{
         
         String as = (String) args.get("as");
         if( as==null || as.length()==0 ){ as = "item"; }
+        try{
+          MongoDb db = new MongoDb();
+          List<Map> result = null;
+          result = db.collection( name ).find( queryString ).limit( limit ).skip(skip).fetch();
 
-        MongoDb db = new MongoDb();
-        List<Map> result = null;
-        result = db.collection( name ).find( queryString ).limit( limit ).skip(skip).fetch();
-
-        for( Map row: result ){
-            body.setProperty(as,row);
-            body.call();            
-        }            
+          for( Map row: result ){
+              body.setProperty(as,row);
+              body.call();            
+          } 
+        }catch(Exception e){
+          
+        }
+           
     }
     
     @SuppressWarnings("unchecked")

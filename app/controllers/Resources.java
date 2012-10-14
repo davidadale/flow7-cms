@@ -17,6 +17,7 @@ import play.templates.TemplateLoader;
 import play.templates.BaseTemplate;
 
 import play.Play;
+import static cms.Strings.*;
 
 public class Resources extends Controller{
     
@@ -26,6 +27,8 @@ public class Resources extends Controller{
         
         Key key = Key.get();
         
+println("Key value is --------------->" + key.toString() );
+
         RequestTransaction rt = new RequestTransaction( key );
         
         Logger.debug("Request for resource " + key.toString() );

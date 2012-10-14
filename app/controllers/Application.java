@@ -10,6 +10,7 @@ import jobs.*;
 import play.cache.Cache;
 
 import cms.*;
+import static cms.Strings.*;
 
 public class Application extends Controller {
 
@@ -70,9 +71,9 @@ public class Application extends Controller {
     public static void preview(Long id ){
         
         Site site = Site.findById( id );
-        
+
         if( site != null ){
-            session.put( "_host" , site.host );			            
+			session.put( "_host" , site.host );
         }
         
         redirect("/");

@@ -48,6 +48,7 @@ public class Site extends Model{
     public static Site findById(Long id) {
         return all().filter("id", id).get();
     }	
+    
 	public static Site findBySiteHost(String host){
 		Site site = all().filter("host",host).get();
 		if( site == null ){

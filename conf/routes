@@ -22,7 +22,8 @@ POST    /_cms/data/{collection}                 Data.put
 GET     /_cms/data/q/{collection}               Data.query
 POST    /_cms/send                              Mailer.send
 GET     /_cms/report/members                    Report.index
-POST     /_cms/form/{collection}                Form.post
+POST    /_cms/form/{collection}                	Form.post
+POST    /_api/sendMessage						Api.sendMessage
     
 # Ignore favicon requests
 GET     /favicon.ico                            404
@@ -30,8 +31,12 @@ GET     /favicon.ico                            404
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
+# Import Secure routes
+*		/                						module:secure
+
 # Catch all
 GET       /_cms/redirect                        Resources.serve
 GET       /{<.*>stuff}                          Resources.serve
 # *       /{controller}/{action}                {controller}.{action}
+
 

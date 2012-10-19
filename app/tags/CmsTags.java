@@ -25,6 +25,11 @@ public class CmsTags extends FastTags{
     
     static GroovyShell shell = new GroovyShell();
     
+    public static void _token(Map<?, ?> args, Closure body, PrintWriter out, 
+       ExecutableTemplate template, int fromLine){
+      //
+    }
+
     public static void _msg(Map<?, ?> args, Closure body, PrintWriter out, 
        ExecutableTemplate template, int fromLine){
            Object value = args.get("key");

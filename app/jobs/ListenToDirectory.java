@@ -31,22 +31,26 @@ public class ListenToDirectory extends Job{
         if( "live".equals( Play.id ) ){
             
             String siteLocation = System.getProperty("site");
+
             if( siteLocation==null || siteLocation.length() == 0 ){
                 throw new RuntimeException("Site location must be provided as a parameter 'site' when running in dev mode.");
             }
             
+            Site site = Site.findBySiteHost( siteLocation );
+            if( site!=null ){ return; }
+
             File file = new File( siteLocation );
             
             if( !file.exists() ){
                 throw new RuntimeException("Site provided is not a valid location. Invalid location provided -> " + siteLocation );
             }
-            
+
             // setup directory listener.
             System.out.println("SYSTEM IS IN DEV MODE SO THE DEVELOPER FETCHER SHOULD BE USED AND THIS JOB IS GOING TO LISTEN TO DIRECTORY.");
             System.out.println("Path to use " +  siteLocation );
             Fetcher.fetchProvider = new DevelopmentFetchProvider( siteLocation );
             
-            Site site = createSite( siteLocation );
+            site = createSite( siteLocation );
             watchDirectory( siteLocation );
             refreshSite( site );
         }

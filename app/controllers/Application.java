@@ -12,6 +12,7 @@ import play.cache.Cache;
 import cms.*;
 import static cms.Strings.*;
 
+@With(Secure.class)
 public class Application extends Controller {
 
     public static void sites() {

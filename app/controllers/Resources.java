@@ -25,14 +25,10 @@ public class Resources extends Controller{
     public static void serve() throws IOException{
 
         Key key = Key.get();
-println (" SHOULD REDIRECT ====================> " + key.shouldRedirect() );
-println (" HOST ====================> " + key.host );
-println (" ROOT ====================> " + key.isRootPath() );
+
         if( key.shouldRedirect() ){
             redirect("/_cms");
         }
-
-println("Key value is --------------->" + key.toString() );
 
         RequestTransaction rt = new RequestTransaction( key );
         

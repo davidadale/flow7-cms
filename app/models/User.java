@@ -1,7 +1,7 @@
 package models;
 
 import siena.*;
-
+@Table("Account")
 public class User extends Model{
 	@Id
 	public Long id;

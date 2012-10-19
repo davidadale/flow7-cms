@@ -1,16 +1,15 @@
 package jobs;
 
-import play.jobs.*;
-import play.Play;
-import play.templates.*;
-import org.apache.commons.vfs.*;
-import org.apache.commons.vfs.impl.*;
+import cms.*;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
-import models.*;
 import java.util.Date;
-import cms.*;
+import models.*;
+import org.apache.commons.vfs.*;
+import org.apache.commons.vfs.impl.*;
+import play.Play;
+import play.jobs.*;
 
 /**
  * This job is only used for live development. By setting the
@@ -57,28 +56,31 @@ public class ListenToDirectory extends Job{
      protected void watchDirectory(final String siteLocation ){
          try{
              FileSystemManager fsManager = VFS.getManager();
-              FileObject listendir = fsManager.resolveFile( (new File(siteLocation)).getAbsolutePath()  );
-
+             final FileObject listendir = fsManager.resolveFile( (new File(siteLocation)).getAbsolutePath()  );
 
               DefaultFileMonitor fm = new DefaultFileMonitor(new FileListener(){
                   public void fileChanged(FileChangeEvent event) {
-                      System.out.println("File changed.");
+
                       try{
                           String path = event.getFile().getName().getPath();
-                          path = path.substring( siteLocation.length() );
+                          File siteDir = new File( siteLocation );
+                          path  = path.replaceAll( siteDir.getCanonicalPath() , "" );
+                          
                           Key key = new Key( siteLocation, path );
                           Resource resource = ResourceCache.get( key );
                           if( resource!=null ){
                                 ResourceCache.remove( resource );
                           }
+
                           //System.out.println("Clean like " + path);
                           //TemplateLoader.cleanCompiledCache( path );
-                          resource = resource.findByKey( key );
-                          
+                          resource = Resource.findByKey( key );
+                                                    
                           if( resource!=null ){
                               resource.data = toBytes( event.getFile().getContent().getInputStream() );
+                              resource.save();
                           }
-                          resource.save();
+                          
                       }catch(Exception e){
                           e.printStackTrace();
                       }

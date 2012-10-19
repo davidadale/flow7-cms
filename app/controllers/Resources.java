@@ -11,7 +11,6 @@ import cms.*;
 import models.Resource;
 import models.RequestTransaction;
 import java.util.Date;
-
 // added to handle template files.
 import play.templates.TemplateLoader;
 import play.templates.BaseTemplate;
@@ -24,9 +23,15 @@ public class Resources extends Controller{
     private static final String FORMAT = "%v %h %u [%t] \"%r\" %s %b \"%ref\" \"%ua\" %rt";
     
     public static void serve() throws IOException{
-        
+
         Key key = Key.get();
-        
+println (" SHOULD REDIRECT ====================> " + key.shouldRedirect() );
+println (" HOST ====================> " + key.host );
+println (" ROOT ====================> " + key.isRootPath() );
+        if( key.shouldRedirect() ){
+            redirect("/_cms");
+        }
+
 println("Key value is --------------->" + key.toString() );
 
         RequestTransaction rt = new RequestTransaction( key );
@@ -40,7 +45,7 @@ println("Key value is --------------->" + key.toString() );
         if( resource!=null ){ Logger.debug("Resource is stale: " + resource.stale ); }
 
         if( resource!=null && !resource.stale && !Play.mode.isDev() ){
-            rt.setResource ( resource ).save();
+            rt.setResource( resource ).save();
             notModified(); 
         }else{
             // this find by key may be problematic... need lots of tests on this.
@@ -52,27 +57,18 @@ println("Key value is --------------->" + key.toString() );
             response.contentType = resource.type;                    
             Logger.debug("Resource type is: " + response.contentType +
                          " resource is binary " + resource.isBinary() );
-                         // check for null
-                         //" resource data size is " + resource.data!=nulllength  );       
 
             if( resource.isBinary() ){
-                
                 ResourceCache.add( resource ); 
                 response.cacheFor( resource.etag  , "200d" , resource.lastUpdate.getTime() );	
                 renderBinary( new ByteArrayInputStream( resource.data ) );
-                                
             }else if( resource.isHtml() ){
-                
-                //BaseTemplate bt = TemplateLoader.load(resource.getKey().toString(), new String( resource.data,"utf-8" ) );
                 BaseTemplate bt = TemplateLoader.loadString( new String( resource.data,"utf-8" ) );                
                 response.print( bt.render() );
-                response.out.flush();
-                                
+                response.out.flush();                                
             }else{
-                
                 response.out.write( resource.data );    
                 response.out.flush();                
-                
             } 
             rt.save();
         }

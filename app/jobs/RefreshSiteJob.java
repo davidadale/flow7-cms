@@ -44,19 +44,19 @@ public class RefreshSiteJob extends Job{
 		recorder.startRecording();
 		
 		for(Resource r: remote){
-            if( files.contains( r ) ){
-                Resource file = files.get( files.indexOf( r ) );
-                if( file.isOld( r ) ){
-                    recorder.recordUpdate( file, r );
-                    file.refresh( r );
-                    file.save();
-                    ResourceCache.remove( file );
-                }
-            }else{
-                recorder.recordNew( r );
-                r.save();
-                files.add( r );
-            }
+                    if( files.contains( r ) ){
+                        Resource file = files.get( files.indexOf( r ) );
+                        if( file.isOld( r ) ){
+                            recorder.recordUpdate( file, r );
+                            file.refresh( r );
+                            file.save();
+                            ResourceCache.remove( file );
+                        }
+                    }else{
+                        recorder.recordNew( r );
+                        r.save();
+                        files.add( r );
+                    }
 		}
 		// remove all remote items from current list
 		for( Resource temp: remote ){

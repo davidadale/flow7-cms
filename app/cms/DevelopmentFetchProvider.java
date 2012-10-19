@@ -49,9 +49,9 @@ public class DevelopmentFetchProvider implements FetchProvider{
         
             try{
                 String path = file.getPath().substring( site.host.length() );
-        		Resource r = new Resource( site.host, path , toBytes( file ), Etag.get( site.host , path, file.lastModified() )  );
-        		r.lastUpdate = new Date( file.lastModified() );
-        		resources.add(  r );
+        	Resource r = new Resource( site.host, path , toBytes( file ), Etag.get( site.host , path, file.lastModified() )  );
+        	r.lastUpdate = new Date( file.lastModified() );
+        	resources.add(  r );
             }catch(Exception e){
                 // log problem
                 e.printStackTrace();

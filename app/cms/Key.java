@@ -3,7 +3,7 @@ package cms;
 import java.io.Serializable;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
-
+import java.util.Arrays;
 import play.mvc.Http;
 
 public class Key implements Serializable{
@@ -11,6 +11,7 @@ public class Key implements Serializable{
     public String host = null;
     public String path = null;
     public String etag = "";
+    protected String[] knownHosts = new String[]{"localhost:9000"}; 
     
     public Key(String host, String path){
         
@@ -37,7 +38,7 @@ public class Key implements Serializable{
     }
     
     protected String getPath( String path ){
-        if( isEmpty( path ) || isRootPath( path ) || "/_cms/redirect".equals( path ) ){
+        if( isEmpty( path ) || "/".equals( path ) || "/_cms/redirect".equals( path ) ){
             return "/index.html";
         }
         if( path!=null && !path.startsWith("/") ){
@@ -46,8 +47,16 @@ public class Key implements Serializable{
         return path;
     }
     
-    protected boolean isRootPath( String path ){
-        return "/".equals( path );
+    public boolean shouldRedirect(){
+        if( Arrays.asList( knownHosts ).contains( this.host ) &&
+            isRootPath() ){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isRootPath(){
+        return "/".equals( this.path ) || "/index.html".equals( this.path);
     }
     
     protected boolean isEmpty(String value ){

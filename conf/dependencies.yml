@@ -4,6 +4,6 @@
 require:
     - play
     - secure
-    - play -> siena 2.0.6
+    - play -> siena 2.0.7
     - org.mongodb -> mongo-java-driver 2.7.2
     - commons-vfs -> commons-vfs 20050307052300

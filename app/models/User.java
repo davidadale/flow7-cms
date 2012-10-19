@@ -21,6 +21,10 @@ public class User extends Model{
         return Model.all(User.class);
     }	
 
+    public static User findById(Long id) {
+        return all().filter("id", id).get();
+    }	
+
     public static User findByUsername(String username){
 		return all().filter("username", username).get();    	
     }

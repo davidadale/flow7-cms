@@ -1,0 +1,34 @@
+#{extends 'Application/viewSite.html'/}
+#{set tab:'rules'/}
+
+          <div id="lD">
+            <div class="row">
+              <div class="span7">
+              <table class="table">              
+                <thead>
+                  <tr>
+                    <th>Require login for these resources</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  #{list items:rules, as:'rule'}
+                  <tr>
+                    <td>${rule.rule}</td>
+                    <td>
+                      <a href="@{Application.deleteSecurityRule(rule.id,site.id)}">
+                          delete</a>
+                    </td>
+                  </tr>
+                  #{/list}
+                </tbody>
+              </table>  
+              <form method="POST" action="@{Application.addSecurityRule()}">   
+                <input type="hidden" name="id" value="${site.id}"/>             
+                <input type="text" name="rule" />
+                <input type="submit" value="Save"/>                
+              </form>  
+            </div>
+            </div>
+          </div>
+

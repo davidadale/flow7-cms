@@ -6,6 +6,17 @@
 #   password: secret
 #   fullname: Bob
 
+User(admin):
+    username: admin@flow7.net
+    password: changeme
+    host: localhost
+
+User(tester):
+    username: tester@flow7.net
+    password: password
+    host: localhost
+
+
 Site(site1):
     username: davidadale
     host: www.michaelbockoven.com

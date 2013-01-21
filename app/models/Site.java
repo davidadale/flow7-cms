@@ -1,14 +1,15 @@
 package models;
 
-import siena.*;
+import play.db.jpa.*;
+import javax.persistence.*;
 import java.util.Date;
 import cms.Host;
 
+@Entity
 public class Site extends Model{
 
-    @Id
-    public Long id;
     public String host;
+    public Boolean localDev = false; 
     public String username;
     public String repository;
     public String status = "active";
@@ -22,12 +23,28 @@ public class Site extends Model{
     public String emailUsername;
     public String emailPassword;
     
+    public Site(){
+        super();
+    }
+
+    public Site(Boolean local){
+        this.localDev = local;
+    }
+
     public void startRefresh(){
         status = "refreshing";
         lastRefresh = new Date();
         this.save();
     }
     
+    public String getCollPrefix(){
+        if( localDev ==  true ){
+            return host.substring( host.lastIndexOf("/")+1 );
+        }else{
+            return host;
+        }
+    }
+
     public boolean isBusy(){
         return "refreshing".equals( status );
     }
@@ -36,27 +53,15 @@ public class Site extends Model{
         status = "active";
         this.save();
     }
-    
-   	public static Query<Site> all() {
-        return Model.all(Site.class);
-    }
-
-	public static int count(){
-		return all().count();
-	}
-
-    public static Site findById(Long id) {
-        return all().filter("id", id).get();
-    }	
-    
+	
 	public static Site findBySiteHost(String host){
-		Site site = all().filter("host",host).get();
+		Site site = find("byHost",host).first();
 		if( site == null ){
 		    String sub = Host.getSubDomain( host );
 		    if( sub==null || sub.length() ==0 ){
-		        site = all().filter("host", "www." + host ).get();
+		        site = find("byHost", "www." + host ).first();
 		    }else if( "www".equals( sub ) ){
-		        site = all().filter("host", host.substring( 4 )   ).get();
+		        site = find("byHost", host.substring( 4 )   ).first();
 		    }
 		}
 		return site;

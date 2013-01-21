@@ -1,6 +1,7 @@
 package models;
 
-import siena.*;
+import play.db.jpa.*;
+import javax.persistence.*;
 
 public class SiteUser extends Model{
     

@@ -5,11 +5,8 @@ import play.mvc.Http.*;
 import models.*;
 import play.vfs.VirtualFile;
 import play.Play;
-
 import org.junit.Before;
-
 import cms.*;
-
 import java.util.*;
 import java.io.*;
 import org.apache.commons.io.FileUtils;
@@ -24,8 +21,8 @@ public class ApplicationTest extends FunctionalTest {
     */
     @Before
     public void setUp(){
-        play.modules.siena.SienaFixtures.deleteAll();
-        play.modules.siena.SienaFixtures.load( "data.yml" );
+        Fixtures.deleteAllModels();
+        Fixtures.loadModels( "data.yml" );
     }
     
     @Test 

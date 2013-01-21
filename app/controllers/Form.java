@@ -7,9 +7,9 @@ public class Form extends Controller{
     
     public static void post(String collection){
         
-        MongoDb db = new MongoDb();
+        //MongoDb db = new MongoDb();
         CMSForm form = CMSForm.createFromMap( params.all() );
-        db.save( collection, form.fields );
+        //db.save( collection, form.fields );
         
         String path = params.get("redirect");
         if( path==null || path.length()==0){

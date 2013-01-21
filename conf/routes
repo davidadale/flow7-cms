@@ -10,20 +10,30 @@ GET     /_cms/cache/dump                        CMSCache.dump
 GET     /_cms/site/create                       Application.addSite
 GET     /_cms/site/{id}/edit                    Application.editSite
 GET     /_cms/site/{id}                         Application.viewSite
+GET     /_cms/site/{id}/resources               Application.viewResources
+GET     /_cms/site/{id}/transactions            Application.viewTransactions
+GET     /_cms/site/{id}/rules                   Application.viewRules
 POST    /_cms/site/save                         Application.saveSite
+POST    /_cms/security/rule                     Application.addSecurityRule
+GET     /_cms/security/rule                     Application.deleteSecurityRule
 GET     /_cms/site/refresh                      Application.refresh
 GET     /_cms/site/{id}/clear                   Application.removeResources
 GET     /_cms/site/{id}/delete                  Application.removeSite
+GET     /_cms/site/{id}/transaction             Application.clearTransactions
 GET     /_cms/site/{id}/preview                 Application.preview
 GET     /_cms/site/{id}/refresh                 Application.refresh
+GET     /_cms/users								Users.list
 GET     /_cms/resource/{id}                     Resources.viewResource
 GET     /_cms/data/{collection}                 Data.get
 POST    /_cms/data/{collection}                 Data.put
 GET     /_cms/data/q/{collection}               Data.query
 POST    /_cms/send                              Mailer.send
 GET     /_cms/report/members                    Report.index
-POST    /_cms/form/{collection}                	Form.post
-POST    /_api/sendMessage						Api.sendMessage
+POST    /_cms/form/{collection}                 Form.post
+POST    /_api/authenticate                      Api.authenticate
+POST    /_api/sendMessage                       Api.sendMessage
+GET     /_api/collection/{collection}           Api.findAll
+POST    /_api/collection/{collection}           Api.addObject
     
 # Ignore favicon requests
 GET     /favicon.ico                            404
@@ -32,7 +42,7 @@ GET     /favicon.ico                            404
 GET     /public/                                staticDir:public
 
 # Import Secure routes
-*		/                						module:secure
+*       /                                       module:secure
 
 # Catch all
 GET       /_cms/redirect                        Resources.serve

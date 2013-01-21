@@ -8,87 +8,20 @@
 </p>
 <div class="tabbable tabs-left">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#lA" data-toggle="tab">Site Info</a></li>
-          <li><a href="#lB" data-toggle="tab">Resources</a></li>
-          <li><a href="#lC" data-toggle="tab">Request Transactions</a></li>
+          <li class="${tab=='info'?'active':''}">
+            <a href="@{Application.viewSite(site.id)}">Site Info</a></li>
+          <li class="${tab=='resources'?'active':''}">
+            <a href="@{Application.viewResources(site.id)}" >Resources</a>
+          </li>
+          <li class="${tab=='transactions'?'active':''}">
+            <a href="@{Application.viewTransactions(site.id)}">Request Transactions</a>
+          </li>
+          <li class="${tab=='rules'?'active':''}">
+            <a href="@{Application.viewRules(site.id)}">Security Rules</a>
+          </li>
         </ul>
         <div class="tab-content">
-          <div class="tab-pane active" id="lA">
-              <div class="row">
-                  <div class="span8">
-                      <h1>${site.host}</h1>
-                      <p>
-                          <a href="/_cms/site/${site.id}/edit">Edit</a>
-                          <a href="/_cms/site/${site.id}/delete" onclick="javascript:return confirm('are you sure?');">Delete</a>                          
-                      </p>
-                      <ul>
-                          <li><strong>Primary Site: </strong>${site.host}</li>
-                          <li><strong>GIT Username: </strong>${site.username}</li>
-                          <li><strong>GIT Repository: </strong>${site.repository}</li>
-                          <li><strong>Registry Provider (i.e. Hover): </strong>${site.registryProvider}</li>
-                          <li>
-                              <dl class="refreshSite">
-                                  <dt><strong>Last Refresh: </strong>${site.lastRefresh?.format('MMMM dd, yyyy')}</dt>
-                                  <!-- this really should be a post and not a get-->
-                                  <dd>
-                                      <a href="/_cms/site/${site.id}/refresh" class="btn">Refresh</a>
-                                      <a href="/_cms/site/${site.id}/preview" class="btn" target="_blank">View Site</a>                                      
-                                      <a href="/_cms/site/${site.id}/clear" onclick="javascript: return confirm('are you sure?');" class="btn">Clear</a>
-                                  </dd>
-                              </dl>
-                          </li>
-                    </ul>      
-                  </div>
-              </div>
-          </div>
-          <div class="tab-pane" id="lB">
-              <div class="row">
-                  <div class="span9">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>Path</th>
-                            <th>Type</th>
-                            <th>Last Update</th>                              
-                          </tr>
-                        </thead>
-                        <tbody>
-                            #{list items:resources, as:'r'}
-                          <tr>
-                            <td><a href="@{Resources.viewResource(r.id)}" target="_blank">${r.path}</a></td>
-                            <td>${r.type}</td>
-                            <td>${r.lastUpdate}</td>
-                          </tr>
-                          #{/list}
-                        </tbody>
-                      </table>
-                  </div>
-              </div>
-          </div>
-          <div class="tab-pane" id="lC">
-              <div class="row">
-                  <div class="span7">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>Requested</th>
-                            <th>URL</th>
-                            <th>Resource ID</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            #{list items:transactions, as:'t'}
-                          <tr>
-                            <td>${t.requested}</td>
-                            <td>${t.url}</td>
-                            <td><a href="@{Resources.viewResource(t.resourceId)}" target="_blank">${t.resourceId}</a></td>                            
-                          </tr>
-                          #{/list}
-                        </tbody>
-                      </table>
-                  </div>
-              </div>
-          </div>
+          #{doLayout /}
         </div>
       </div>
       

@@ -3,8 +3,6 @@ import java.util.*;
 import play.test.*;
 import models.Resource;
 import models.Site;
-
-
 import cms.*;
 
 public class BasicTest extends UnitTest {
@@ -169,6 +167,18 @@ public class BasicTest extends UnitTest {
             assertTrue( 29277 == uri.port );
             assertEquals("heroku_app123", uri.database );
         
+    }
+
+    @Test
+    public void test_mongo_db_uri_with_defaults(){
+        String prop = "mongodb://localhost";
+        MongoDbURI uri = new MongoDbURI( prop );
+        assertEquals("localhost",uri.host);
+        assertEquals("flow7-web", uri.database);
+        assertEquals(new Integer(27017), uri.port );
+        assertNull( uri.username );
+        assertNull( uri.password );
+
     }
     
     

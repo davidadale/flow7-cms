@@ -1,0 +1,27 @@
+#{extends 'Application/viewSite.html'/}
+#{set tab:'resources'/}
+          <div id="lB">
+              <div class="row">
+                  <div class="span9">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th>Path</th>
+                            <th>Type</th>
+                            <th>Last Update</th>                              
+                          </tr>
+                        </thead>
+                        <tbody>
+                            #{list items:resources, as:'r'}
+                          <tr>
+                            <td><a href="@{Resources.viewResource(r.id)}" target="_blank">${r.path}</a></td>
+                            <td>${r.type}</td>
+                            <td>${r.lastUpdate}</td>
+                          </tr>
+                          #{/list}
+                        </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+

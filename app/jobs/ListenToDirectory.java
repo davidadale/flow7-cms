@@ -11,6 +11,8 @@ import org.apache.commons.vfs.impl.*;
 import play.Play;
 import play.jobs.*;
 
+import org.apache.commons.io.*;
+import jobs.UpdateResource.Action;
 /**
  * This job is only used for live development. By setting the
  * id to 'live' it will allow the system to watch a directory 
@@ -28,7 +30,7 @@ public class ListenToDirectory extends Job{
      */
     public void doJob() {
         
-        if( "live".equals( Play.id ) ){
+        if( "live".equals( Play.id ) || "test".equals( Play.id ) ){
             
             String siteLocation = System.getProperty("site");
 
@@ -64,7 +66,6 @@ public class ListenToDirectory extends Job{
 
               DefaultFileMonitor fm = new DefaultFileMonitor(new FileListener(){
                   public void fileChanged(FileChangeEvent event) {
-
                       try{
                           String path = event.getFile().getName().getPath();
                           File siteDir = new File( siteLocation );
@@ -73,17 +74,16 @@ public class ListenToDirectory extends Job{
                           Key key = new Key( siteLocation, path );
                           Resource resource = ResourceCache.get( key );
                           if( resource!=null ){
-                                ResourceCache.remove( resource );
+                            ResourceCache.remove( resource );
                           }
 
+                          UpdateResource job = new UpdateResource( key, 
+                              IOUtils.toByteArray( event.getFile().getContent().getInputStream() ) );
+
+                          job.setAction( Action.Update );
+                          job.now();
                           //System.out.println("Clean like " + path);
                           //TemplateLoader.cleanCompiledCache( path );
-                          resource = Resource.findByKey( key );
-                                                    
-                          if( resource!=null ){
-                              resource.data = toBytes( event.getFile().getContent().getInputStream() );
-                              resource.save();
-                          }
                           
                       }catch(Exception e){
                           e.printStackTrace();
@@ -94,16 +94,27 @@ public class ListenToDirectory extends Job{
                       System.out.println("file deleted");                     
                   }
                   public void fileCreated(FileChangeEvent event) {
-                      try{
-                          
-
-                      System.out.println("file created");    
+                    try{
+                      byte[] data = IOUtils.toByteArray(event.getFile().getContent().getInputStream());
                       String path = event.getFile().getName().getPath();
-                      path = path.substring( siteLocation.length() );
-                      Resource r = new Resource( siteLocation, path , toBytes( event.getFile().getContent().getInputStream()  ),
-                       Etag.get( siteLocation , path, event.getFile().getContent().getLastModifiedTime() )  );    
-                      r.lastUpdate = new Date( event.getFile().getContent().getLastModifiedTime() );
-                      r.save();             
+                      File siteDir = new File( siteLocation );
+                      
+                      path  = path.replaceAll( siteDir.getCanonicalPath() , "" );                      
+                      String etag = Etag.get( siteLocation , path, event.getFile().getContent().getLastModifiedTime() );
+                      
+                      Key key = new Key( siteLocation, path );
+                      UpdateResource job = new UpdateResource( key, data );
+                      job.setAction( Action.Create );
+                      job.setEtag( etag );
+                      job.now();
+
+
+                      //Resource r = new Resource( siteLocation, 
+                      //                           path , toBytes(  is ),
+                      //                           etag );                      
+    
+                      //r.lastUpdate = new Date( event.getFile().getContent().getLastModifiedTime() );
+                      //r.save();             
                     }catch(Exception e){
                         e.printStackTrace();
                     }
@@ -120,7 +131,7 @@ public class ListenToDirectory extends Job{
      }
      
      protected Site createSite(String siteLocation){
-         Site site = new Site();
+         Site site = new Site( true ); // set site local
          site.host = siteLocation;
          site.save();
          return site;

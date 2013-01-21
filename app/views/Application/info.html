@@ -1,0 +1,31 @@
+#{extends 'Application/viewSite.html'/}
+#{set tab:'info'/}
+${tab}
+          <div id="lA">
+              <div class="row">
+                  <div class="span8">
+                      <h1>${site.host}</h1>
+                      <p>
+                          <a href="/_cms/site/${site.id}/edit">Edit</a>
+                          <a href="/_cms/site/${site.id}/delete" onclick="javascript:return confirm('are you sure?');">Delete</a>                          
+                      </p>
+                      <ul>
+                          <li><strong>Primary Site: </strong>${site.host}</li>
+                          <li><strong>GIT Username: </strong>${site.username}</li>
+                          <li><strong>GIT Repository: </strong>${site.repository}</li>
+                          <li><strong>Registry Provider (i.e. Hover): </strong>${site.registryProvider}</li>
+                          <li>
+                              <dl class="refreshSite">
+                                  <dt><strong>Last Refresh: </strong>${site.lastRefresh?.format('MMMM dd, yyyy')}</dt>
+                                  <!-- this really should be a post and not a get-->
+                                  <dd>
+                                      <a href="/_cms/site/${site.id}/refresh" class="btn">Refresh</a>
+                                      <a href="/_cms/site/${site.id}/preview" class="btn" target="_blank">View Site</a>                                      
+                                      <a href="/_cms/site/${site.id}/clear" onclick="javascript: return confirm('are you sure?');" class="btn">Clear</a>
+                                  </dd>
+                              </dl>
+                          </li>
+                    </ul>      
+                  </div>
+              </div>
+          </div>

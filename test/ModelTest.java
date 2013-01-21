@@ -1,11 +1,6 @@
 import org.junit.*;
 import java.util.*;
 import play.test.*;
-
-
-import play.modules.siena.SienaFixtures;
-
-
 import models.Resource;
 import models.Site;
 import cms.*;
@@ -14,9 +9,9 @@ public class ModelTest extends UnitTest {
 
     @Before
     public void setUp(){
-        SienaFixtures.deleteAll();
+        Fixtures.deleteAllModels();
+        //Fixtures.loadModels( "data.yml" );
     }
-
 
     @Test
     public void test_save_resource(){
@@ -24,6 +19,15 @@ public class ModelTest extends UnitTest {
         r.save();
         List<Resource> list = r.all().fetch();
         assertTrue( list.size()== 1 );
+    }
+
+    @Test
+    public void test_local_site_coll_prefix(){
+        Site site = new Site(true);
+        site.host = "../sites/imagine1";
+        site.save();
+        Site tmp = Site.findBySiteHost("../sites/imagine1");
+        assertEquals(tmp.getCollPrefix(), "imagine1");
     }
     
     @Test
@@ -61,6 +65,15 @@ public class ModelTest extends UnitTest {
     }    
     
     @Test
+    public void test_site_with_subdomain(){
+        Site site = new Site();
+        site.host = "cms.flow7.net";
+        site.save();
+        Site s = Site.findBySiteHost("cms.flow7.net");
+        assertNotNull( s );
+    }
+
+    @Test
     public void test_resource_find_by_host_and_path(){
         Resource resource = new Resource("www.imagine1.org","/index.html");
         resource.save();
@@ -75,7 +88,7 @@ public class ModelTest extends UnitTest {
         Resource result = Resource.findByKey( new Key("www.imagine1.org", "index.html") );
         assertNotNull ( result );
     }
-    
+
     @Test
     public void test_naked_resource_find_by_key(){
         Resource resource = new Resource("imagine1.org","/index.html");

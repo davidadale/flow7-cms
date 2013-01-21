@@ -24,8 +24,8 @@ public class Data extends Controller{
         
         CMSForm form = CMSForm.createFromMap( params.all() );
         
-        MongoDb db = new MongoDb();
-        db.save( collection, form.fields );        
+        //MongoDb db = new MongoDb();
+        //db.save( collection, form.fields );        
     }
 
     public static void get(String collection) {
@@ -33,8 +33,8 @@ public class Data extends Controller{
     }
 
     public static void query( String collection, String query ){
-        MongoDb db = new MongoDb();
-        List<Map> items = db.collection(collection).find( query ).fetch();
+        //MongoDb db = new MongoDb();
+        List<Map> items = null; //db.collection(collection).find( query ).fetch();
         renderJSON( items );
     }
     

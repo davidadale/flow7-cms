@@ -12,8 +12,19 @@ import play.cache.Cache;
 import cms.*;
 import static cms.Strings.*;
 
+import play.test.*;
+
 @With(Secure.class)
 public class Application extends Controller {
+
+    @Before(only={"sites"})
+    static void setLocalSite(){
+        if( "test".equals( Play.id ) ){
+            Fixtures.deleteAllModels();
+            new ListenToDirectory().doJob();
+        }
+    }
+
 
     public static void sites() {
         List<Site> sites = Site.all().fetch();
@@ -25,6 +36,19 @@ public class Application extends Controller {
         renderTemplate("Application/editSite.html", site );
     }
     
+    public static void addSecurityRule(Long id, String rule){
+        Site site = Site.findById( id );
+        SecurityRule sr = new SecurityRule( site.host, rule );
+        sr.save();
+        viewRules( site.id );
+    }
+
+    public static void deleteSecurityRule(Long id, Long site_id){
+        SecurityRule sr = SecurityRule.findById( id );
+        sr.delete();
+        viewRules( site_id );
+    }
+
     public static void editSite(Long id){
         Site site = Site.findById( id );
         render( site );        
@@ -32,9 +56,34 @@ public class Application extends Controller {
     
     public static void viewSite(Long id){
         Site site = Site.findById( id );
-        List<Resource> resources = Resource.findAllByHost( site.host );
+        renderTemplate("Application/info.html",site);
+    }
+
+    public static void viewResources(Long id){
+        Site site = Site.findById( id );
+        List<Resource> resources = Resource.findAllByHost(site.host);
+        renderTemplate("Application/resources.html",site,resources);
+    }
+
+    public static void viewTransactions(Long id){
+        Site site = Site.findById( id );
         List<RequestTransaction> transactions = RequestTransaction.findByHost( site.host );
-        render(site, resources, transactions);
+        renderTemplate("Application/transactions.html",site,transactions);
+    }
+
+    public static void viewRules(Long id ){
+        Site site = Site.findById( id );
+        List<SecurityRule> rules = SecurityRule.findAllByHost( site.host );
+        renderTemplate("Application/rules.html",site,rules);
+    }
+
+    public static void clearTransactions(Long id){
+        Site site = Site.findById( id );
+        List<RequestTransaction> transactions = RequestTransaction.findByHost( site.host );
+        for( RequestTransaction rt: transactions ){
+            rt.delete();
+        }
+        viewSite(id);
     }
     
     public static void saveSite(Site site){

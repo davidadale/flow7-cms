@@ -3,6 +3,10 @@ package controllers;
 import play.mvc.*;
 import play.Logger;
 import play.cache.Cache;
+import play.templates.TemplateLoader;
+import play.templates.BaseTemplate;
+import play.Play;
+
 import org.apache.commons.lang.StringUtils;
 import org.jboss.netty.handler.codec.http.HttpHeaders;
 import java.io.ByteArrayInputStream;
@@ -11,11 +15,7 @@ import cms.*;
 import models.Resource;
 import models.RequestTransaction;
 import java.util.Date;
-// added to handle template files.
-import play.templates.TemplateLoader;
-import play.templates.BaseTemplate;
 
-import play.Play;
 import static cms.Strings.*;
 
 public class Resources extends Controller{
@@ -31,9 +31,18 @@ public class Resources extends Controller{
         }
 
         RequestTransaction rt = new RequestTransaction( key );
-        
+
         Logger.debug("Request for resource " + key.toString() );
         
+        // check to see if the resource is locked and if
+        // the user is connected
+        SecurityRules rules = SecurityRules.get( key );
+        if( rules.secured( key ) && !UserSession.isConnected() ){
+            //unauthorized();
+            // redirect to login page
+            redirect("/unauthorized.html");
+        }
+
         Resource resource = ResourceCache.get( key );
         
         Logger.debug("Resource retrieved from cache: " + (resource!=null) ); 
@@ -71,6 +80,8 @@ public class Resources extends Controller{
         
 
     }
+
+
     
     public static void viewResource(Long id) throws IOException{
         Resource resource = Resource.findById( id );

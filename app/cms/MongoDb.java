@@ -18,41 +18,128 @@ import play.Play;
 import play.Logger;
 
 import java.util.Set;
+import static cms.Strings.*;
+
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.*;
+import java.lang.reflect.Type;
+
+import java.io.*;
+import java.net.*;
+
+import models.Site;
 
 public class MongoDb{
+
+    static Type type =
+        new TypeToken<Map<String, Object>>(){}.getType();
 
     DB  db = null;
     String collection = "";
     Integer limit = null;
     Integer skip = null;
     DBObject query = null;
-    List<Map> result = new ArrayList<Map>();
     
-    public MongoDb(){
+    List<Map> result = new ArrayList<Map>();
+
+    String site;
+    
+    private MongoDb(String site){
+        
+        this.site = site;
+
         try{
-            
-            if( Play.mode.isDev() ){
-                Mongo m = new Mongo();
-                db = m.getDB("clientData");
-            }else{
-                //            mongodb://heroku_app2423536:g1gf1usm7it68qehbju2753f55@ds029277.mongolab.com:29277/heroku_app2423536
-                String uri = System.getenv("MONGOLAB_URI");
-                MongoDbURI muri = new MongoDbURI( uri );
-                Mongo mongo = new Mongo( muri.host, muri.port );
-                db = mongo.getDB( muri.database );
-                db.authenticate( muri.username, muri.password.toCharArray() );
-            }
+            String uri = System.getenv("MONGOLAB_URI");
+            MongoDbURI muri = new MongoDbURI( uri );
+            Mongo mongo = new Mongo( muri.host, muri.port ); 
+            if( muri.hasDb() ){ db = mongo.getDB( muri.database ); }
+            if( muri.hasUserPass() ){ db.authenticate( muri.username, muri.password.toCharArray() ); }
 
         }catch(Exception e ){
             Logger.error(e, "Error creating a connection to mongodb");
         }
 
     }
+
+    /**
+     * not for sure why i started going down this path
+     * i remember trying to match up the tested site with the local
+     * mongo db collections
+     */
+    public static MongoDb get(){
+        String host = Host.get();
+        Site site = Site.findBySiteHost( host );
+        return new MongoDb( site.getCollPrefix() );
+
+    }
+
+    public static MongoDb get( String host ){   
+        return new MongoDb( host );
+    }
+
     
-    public void save( String collection, Map object ){
+
+    public MongoDb load(String collection, String file){
+        InputStream is = null;
+        try{
+            URL url = this.getClass().getClassLoader().getResource( file );
+            is = url.openStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader( is ));
+            
+            String line = null;
+            while( (line= br.readLine() )!=null ){
+                save( collection, line );
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{is.close();}catch(Exception e){}
+        }
+
+        return this;
+    }   
+
+    public MongoDb drop(){
+        if( collection!=null ){            
+            getCollection().drop();
+        }
+        return this;
+    }
+
+    protected DBCollection getCollection(){
+        return db.getCollection( getSiteCollection( collection ) );
+    }
+
+    public MongoDb deleteDatabase(){
+        if( db!=null ){ db.dropDatabase(); }
+        return this;
+    }
+
+    protected String getSiteCollection( String coll ){
+        return this.site + "_" + coll;
+    }
+    
+    public MongoDb save( String collection, String obj ){
+        Gson gson = new Gson();
+        Map<String, Object> object =
+            gson.fromJson( obj, type);     
         BasicDBObject o = new BasicDBObject( object );
-        DBCollection coll = db.getCollection( collection );
+        DBCollection coll = db.getCollection( getSiteCollection( collection ) );
         coll.save( o );
+        return this;
+    }
+
+    public MongoDb save( String collection, Map object ){
+        BasicDBObject o = new BasicDBObject( object );
+        DBCollection coll = db.getCollection( getSiteCollection( collection ) );
+        coll.save( o );
+        return this;
+    }
+
+    public MongoDb with( String coll ){
+        this.collection = coll;
+        return this;
     }
 
     public MongoDb collection( String name ){
@@ -95,7 +182,7 @@ public class MongoDb{
         return result;
     }
     protected void all(){
-        DBCursor cursor = db.getCollection( collection ).find();
+        DBCursor cursor = db.getCollection( getSiteCollection(collection) ).find();
         if( skip!=null ){ cursor.skip( skip ); }
         while( cursor.hasNext() ){
             Map record = cursor.next().toMap();

@@ -6,14 +6,12 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
-import siena.*;
+import play.db.jpa.*;
+import javax.persistence.*;
 import cms.*;
 
-
+@Entity
 public class Resource extends Model implements Serializable{
-
-    @Id
-    public Long id;
 
     public String type;
 
@@ -21,7 +19,7 @@ public class Resource extends Model implements Serializable{
     
     public String host;
 
-    @Column("file_data")
+    @Column(name="file_data",length=2097152)
     public byte[] data;
     
     public String etag;
@@ -88,39 +86,27 @@ public class Resource extends Model implements Serializable{
             .append( path )
             .toHashCode();
     }
-   	
-   	public static Query<Resource> all() {
-        return Model.all(Resource.class);
-    }    
-    
-	public static int count(){
-		return all().count();
-	}    
-    
-    public static Resource findById(Long id){
-        return all().filter("id", id).get();
-    }
     
     public static List<Resource> findAllByHost(String host){
-        List<Resource> results = all().filter("host",host).fetch();
+        List<Resource> results = find("byHost",host).fetch();
         if( results.isEmpty() ){
             String subdomain = Host.getSubDomain( host );
             if( subdomain==null || subdomain.length()==0){
-                results = all().filter("host","www." + host ).fetch();
+                results = find("byHost","www." + host ).fetch();
             }
             if( "www".equals( subdomain) ){
-                results = all().filter("host",host.substring(4) ).fetch();
+                results = find("byHost",host.substring(4) ).fetch();
             }
         }
         return results;
     }
     
     public static void deleteAllByHost( String host ){
-        all().filter("host",host).delete();
+        delete("host=?",host);
     }
 
     public static Resource findByHostAndPath(String host, String path){
-        return all().filter("host",host).filter("path",path).get();
+        return find("byHostAndPath",host,path).first();
     }
     
     public static Resource findByKey( Key key ){

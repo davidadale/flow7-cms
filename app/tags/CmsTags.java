@@ -18,7 +18,7 @@ import play.mvc.Http.Request;
 
 import java.util.Random;
 import java.lang.reflect.Method;
-
+import static cms.Strings.*;
 
 @FastTags.Namespace("cms") 
 public class CmsTags extends FastTags{ 
@@ -79,10 +79,9 @@ public class CmsTags extends FastTags{
         String as = (String) args.get("as");
         if( as==null || as.length()==0 ){ as = "item"; }
         try{
-          MongoDb db = new MongoDb();
+          MongoDb db = MongoDb.get();
           List<Map> result = null;
           result = db.collection( name ).find( queryString ).limit( limit ).skip(skip).fetch();
-
           for( Map row: result ){
               body.setProperty(as,row);
               body.call();            

@@ -3,7 +3,6 @@
 #    - com.google.collections -> google-collections 1.0
 require:
     - play
-    - secure
-    - play -> siena 2.0.7
+    - secure    
     - org.mongodb -> mongo-java-driver 2.7.2
     - commons-vfs -> commons-vfs 20050307052300

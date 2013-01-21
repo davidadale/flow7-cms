@@ -1,0 +1,28 @@
+#{extends 'Application/viewSite.html'/}
+#{set tab:'transactions'/}
+
+          <div id="lC">
+              <div class="row">
+                  <div class="span7">
+                    <a href="@{Application.clearTransactions(site.id)}">Clear Transactions</a>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th>Requested</th>
+                            <th>URL</th>
+                            <th>Resource ID</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            #{list items:transactions, as:'t'}
+                          <tr>
+                            <td>${t.requested}</td>
+                            <td>${t.url}</td>
+                            <td><a href="@{Resources.viewResource(t.resourceId)}" target="_blank">${t.resourceId}</a></td>                            
+                          </tr>
+                          #{/list}
+                        </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>

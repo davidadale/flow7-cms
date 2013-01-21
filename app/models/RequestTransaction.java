@@ -1,15 +1,15 @@
 package models;
 
 import java.io.Serializable;
-import siena.*;
+import play.db.jpa.*;
+import javax.persistence.*;
 import cms.*;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class RequestTransaction extends Model implements Serializable{
 
-    @Id
-    public Long id;
     public Long resourceId;
     public String host;
     public String url;
@@ -31,12 +31,10 @@ public class RequestTransaction extends Model implements Serializable{
         return this;
     }
     
-   	public static Query<RequestTransaction> all() {
-        return Model.all(RequestTransaction.class);
-    }    
     
     public static List<RequestTransaction> findByHost(String host){
-       return all().filter("host", host).order("-requested").fetch(100);
+        return find("host=? order by requested desc", host).fetch();
+       //return find("byHost", host).order("-requested").fetch(100);
     }
 
     

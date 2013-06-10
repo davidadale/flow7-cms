@@ -23,6 +23,8 @@ GET     /_cms/site/{id}/transaction             Application.clearTransactions
 GET     /_cms/site/{id}/preview                 Application.preview
 GET     /_cms/site/{id}/refresh                 Application.refresh
 GET     /_cms/users								Users.list
+GET     /_cms/user                              Users.create
+GET     /_cms/user/{id}							Users.edit
 GET     /_cms/resource/{id}                     Resources.viewResource
 GET     /_cms/data/{collection}                 Data.get
 POST    /_cms/data/{collection}                 Data.put

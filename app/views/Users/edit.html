@@ -1,0 +1,37 @@
+#{extends 'main.html'/}
+#{set title: 'Edit User'/}
+#{set active:'users'/}
+#{set 'moreScripts'}
+	#{script 'app.js'}
+#{/set}
+
+<div class="container">
+  <div id="lB">
+      <div class="row">
+          <div class="span9" ng-controller="EditUserCtrl">
+			<form>
+			  <fieldset>
+			    <legend>Edit User</legend>
+			    <label>Email</label>
+			    <input type="text" name="user.username">
+			   	<label>Password</label>
+			    <input type="password" name="user.password">
+			   	<label>Confirm</label>
+			    <input type="password" name="confirm">			    
+			    <label>Host</label>
+			    <input type="text" name="user.host">
+				<label class="radio">
+				  <input type="radio" name="user.role" value="SITE_USER">
+				  Site User
+				</label>
+				<label class="radio">
+				  <input type="radio" name="user.role"  value="ADMIN" #{checked test=}>
+				  Administrator
+				</label>
+			    <button type="submit" class="btn">Save</button>
+			  </fieldset>
+			</form>
+         </div>
+       </div>  
+</div>
+</div>

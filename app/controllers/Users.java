@@ -10,4 +10,14 @@ public class Users extends Controller{
 		List<User> users = User.findAll();
 		render( users );
 	}
+
+	public static void create(){
+		User user = new User();
+		render( user );
+	}
+
+	public static void edit(Long id){
+		User user = User.findById( id );
+		render( user );
+	}
 }

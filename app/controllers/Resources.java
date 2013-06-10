@@ -2,7 +2,6 @@ package controllers;
 
 import play.mvc.*;
 import play.Logger;
-import play.cache.Cache;
 import play.templates.TemplateLoader;
 import play.templates.BaseTemplate;
 import play.Play;
@@ -14,9 +13,6 @@ import java.io.IOException;
 import cms.*;
 import models.Resource;
 import models.RequestTransaction;
-import java.util.Date;
-
-import static cms.Strings.*;
 
 public class Resources extends Controller{
     

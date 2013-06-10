@@ -1,0 +1,28 @@
+#{extends 'main.html'/}
+#{set title: 'Create User'/}
+#{set active:'users'/}
+#{set 'moreScripts'}
+	#{script 'app.js'/}
+#{/set}
+<div class="container">
+  <div id="lB">
+      <div class="row">
+          <div class="span9">
+			<form>
+			  <fieldset>
+			    <legend>Create User</legend>
+			    <label>Email</label>
+			    <input type="text" name="user.username">
+			   	<label>Password</label>
+			    <input type="text" name="user.password">
+			    <span class="help-block">Example block-level help text here.</span>
+			    <label class="checkbox">
+			      <input type="checkbox"> Check me out
+			    </label>
+			    <button type="submit" class="btn">Submit</button>
+			  </fieldset>
+			</form>
+         </div>
+       </div>  
+</div>
+</div>

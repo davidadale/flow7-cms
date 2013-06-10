@@ -24,7 +24,7 @@ public class Resource extends Model implements Serializable{
     
     public String etag;
     
-    public Date lastUpdate;
+    public Date lastUpdate = new Date();
 
     //@Transient
     public boolean stale = false;

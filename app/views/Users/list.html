@@ -1,7 +1,7 @@
 #{extends 'main.html'/}
 #{set title: 'Users'/}
 #{set active:'users'/}
-
+<a href="@{Users.create()}">New User</a>
 <div class="container">
   <div id="lB">
       <div class="row">
@@ -14,7 +14,7 @@
             	<tbody>
             	#{list items:users, as:"user"}
             	<tr>
-            		<td>${user.username}</td>
+            		<td><a href="@{Users.edit(user.id)}">${user.username}</a></td>
             		<td>${user.host}</td>            		
             	</tr>	
             	#{/list}

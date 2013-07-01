@@ -3,6 +3,8 @@
 # ~~~~
 
 # Home page
+GET     /index  								General.index
+GET     /reset									General.reset
 GET     /_cms                                   Application.sites
 GET     /_cms/cache                             CMSCache.index
 GET     /_cms/cache/item/remove                 CMSCache.remove

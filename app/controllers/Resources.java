@@ -20,13 +20,17 @@ public class Resources extends Controller{
     
     public static void serve() throws IOException{
 
-        Key key = Key.get();
-
-        if( key.shouldRedirect() ){
-            redirect("/_cms");
+        if( !Host.isManagedSite( Host.get() ) ){
+            General.index();
         }
 
-        RequestTransaction rt = new RequestTransaction( key );
+        Key key = Key.get();
+
+        //if( key.shouldRedirect() ){
+        //    redirect("/_cms");
+        //}
+
+        RequestTransaction rt = RequestTransaction.findByKey( key );
 
         Logger.debug("Request for resource " + key.toString() );
         
@@ -43,10 +47,10 @@ public class Resources extends Controller{
         
         Logger.debug("Resource retrieved from cache: " + (resource!=null) ); 
         
-        if( resource!=null ){ Logger.debug("Resource is stale: " + resource.stale ); }
+        if( resource!=null ){ Logger.debug("Checking if resource is stale: " + resource.stale ); }
 
         if( resource!=null && !resource.stale && !Play.mode.isDev() ){
-            rt.setResource( resource ).save();
+            rt.setResource( resource );
             notModified(); 
         }else{
             // this find by key may be problematic... need lots of tests on this.
@@ -71,9 +75,10 @@ public class Resources extends Controller{
                 response.out.write( resource.data );    
                 response.out.flush();                
             } 
-            rt.save();
+            
         }
-        
+        rt.incrementCount();
+        rt.save();
 
     }
 

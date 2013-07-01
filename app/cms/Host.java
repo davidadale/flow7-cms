@@ -2,6 +2,7 @@ package cms;
 
 import play.mvc.Scope;
 import play.mvc.Http;
+import models.*;
 
 public class Host{
     
@@ -13,11 +14,18 @@ public class Host{
             host = Http.Request.current().host;
         }        
 
-        if( host==null ){
-            host = "localhost";
-        }
+        //if( host==null ){
+        //    host = "localhost";
+        //}
 
         return host;
+    }
+
+    public static Boolean isManagedSite( String host ){
+
+        Resource resource = Resource.find("byHost", host ).first();
+        return ( resource != null );
+
     }
     
     public static String getSubDomain(String host){

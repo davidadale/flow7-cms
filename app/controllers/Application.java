@@ -11,7 +11,7 @@ import play.cache.Cache;
 
 import cms.*;
 import static cms.Strings.*;
-
+import java.io.File;
 import play.test.*;
 
 @With(Secure.class)
@@ -57,6 +57,18 @@ public class Application extends Controller {
     public static void viewSite(Long id){
         Site site = Site.findById( id );
         renderTemplate("Application/info.html",site);
+    }
+
+    public static void manage(Long id){
+        Site site = Site.findById( id );
+        renderTemplate("Application/manage.html",site);
+    }
+
+    public static void upload(File file){
+        Map result = new HashMap();
+        result.put("success",true);
+        System.out.println("File: " + file );
+        renderJSON(result);
     }
 
     public static void viewResources(Long id){

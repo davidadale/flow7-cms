@@ -22,6 +22,8 @@ GET     /_cms/site/refresh                      Application.refresh
 GET     /_cms/site/{id}/clear                   Application.removeResources
 GET     /_cms/site/{id}/delete                  Application.removeSite
 GET     /_cms/site/{id}/transaction             Application.clearTransactions
+GET     /_cms/site/{id}/manage					Application.manage
+POST    /_cms/upload							Application.upload
 GET     /_cms/site/{id}/preview                 Application.preview
 GET     /_cms/site/{id}/refresh                 Application.refresh
 GET     /_cms/users								Users.list

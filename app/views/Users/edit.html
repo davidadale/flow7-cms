@@ -2,7 +2,7 @@
 #{set title: 'Edit User'/}
 #{set active:'users'/}
 #{set 'moreScripts'}
-	#{script 'app.js'}
+	#{script 'app.js'/}
 #{/set}
 
 <div class="container">
@@ -13,7 +13,7 @@
 			  <fieldset>
 			    <legend>Edit User</legend>
 			    <label>Email</label>
-			    <input type="text" name="user.username">
+			    <input type="text" name="user.username" value="${user.username}">
 			   	<label>Password</label>
 			    <input type="password" name="user.password">
 			   	<label>Confirm</label>
@@ -25,7 +25,7 @@
 				  Site User
 				</label>
 				<label class="radio">
-				  <input type="radio" name="user.role"  value="ADMIN" #{checked test=}>
+				  <input type="radio" name="user.role"  value="ADMIN" #{checked test=user.role/}>
 				  Administrator
 				</label>
 			    <button type="submit" class="btn">Save</button>
